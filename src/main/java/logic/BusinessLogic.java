@@ -445,7 +445,7 @@ public class BusinessLogic implements Observable {
         try {
             this.persistence.save(address, this.storageContent);
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
         return true;
     }

@@ -1,24 +1,41 @@
 import logic.BusinessLogic;
 import logic.dummies.DummyContentAdder;
+import models.mediaDB.Content;
 import models.storage.StorageContent;
 
 import java.math.BigDecimal;
 
 public class PersistenceMain {
     public static void main(String[] args) {
-        BusinessLogic bl = new BusinessLogic(new StorageContent(BigDecimal.valueOf(Long.parseLong("1234"))));
+        System.out.println("###");
+        BusinessLogic bl = new BusinessLogic(new StorageContent(BigDecimal.valueOf(Long.parseLong("54321"))));
         DummyContentAdder dummy = new DummyContentAdder(bl);
         Boolean run = true;
-        BigDecimal size = bl.getStorageActuallySize();
+        BigDecimal size = BigDecimal.ZERO;
         do {
-            if (size.compareTo(bl.getStorageActuallySize()) > 0) {
-                System.out.println("Before: " + size);
-                dummy.addDummy();
-                size = bl.getStorageActuallySize();
-                System.out.println("After: " + size);
-            } else {
+            System.out.println("Before: " + bl.getStorageActuallySize());
+            dummy.addDummy();
+            if (size.equals(bl.getStorageActuallySize())) {
                 run = false;
+            } else {
+                System.out.println("After: " + size);
+                size = bl.getStorageActuallySize();
             }
-        } while (run);
+        }
+        while (run);
+
+        for (Content k : bl.getStorage().getListContent()) {
+            System.out.println(k.toString());
+        }
+        System.out.println("###");
+
+        bl.saveStorage("storage001.txt");
+
+        BusinessLogic bl2 = new BusinessLogic();
+        bl.loadStorage("storage001.txt");
+
+        for (Content k : bl2.getStorage().getListContent()) {
+            System.out.println(k.toString());
+        }
     }
 }

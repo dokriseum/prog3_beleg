@@ -2,7 +2,6 @@ package logic.persistence;
 
 import logic.BusinessLogic;
 import models.storage.Storage;
-import models.storage.StorageContent;
 
 import java.io.*;
 
@@ -18,7 +17,6 @@ public class Persistence {
         ObjectOutputStream oos = new ObjectOutputStream(fos);
 
         oos.writeObject(storage);
-        oos.flush();
         if (oos != null) {
             oos.close();
         }
@@ -31,10 +29,7 @@ public class Persistence {
     public Object load(String path) throws IOException, ClassNotFoundException {
         FileInputStream fis = new FileInputStream(path);
         ObjectInputStream ois = new ObjectInputStream(fis);
-        Storage tempStorage = null;
-        if ((ois.readObject() instanceof StorageContent) || (ois.readObject() instanceof Storage)) {
-            tempStorage = (StorageContent) ois.readObject();
-        }
+        Storage tempStorage = (Storage) ois.readObject();
 
         if (ois != null) {
             ois.close();

@@ -1,5 +1,7 @@
 package models.mediaDB;
 
-public interface Uploader {
+import java.io.Serializable;
+
+public interface Uploader extends Serializable {
     String getName();
 }
