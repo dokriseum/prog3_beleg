@@ -9,7 +9,7 @@ package models.storage;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public interface Storage {
+public interface Storage extends Serializable {
     BigDecimal getCapacity();
 
     long getAccessCount();

@@ -9,13 +9,13 @@ package logic;
 import exceptions.SizeReachedException;
 import logic.observer.Observable;
 import logic.observer.Observer;
+import logic.persistence.Persistence;
 import models.mediaDB.*;
 import models.storage.MediaType;
+import models.storage.Storage;
 import models.storage.StorageContent;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
@@ -25,6 +25,7 @@ public class BusinessLogic implements Observable {
     private List<Uploader> listUploader;
     private long addressCounter;
     private List<Observer> observers;
+    private Persistence persistence = new Persistence(this);
 
     public BusinessLogic() {
         this.storageContent = new StorageContent(new BigDecimal("1"));
@@ -45,49 +46,11 @@ public class BusinessLogic implements Observable {
         observers = new LinkedList<>();
     }
 
-    public BigDecimal getStorageTotalSize() {
-        if (storageContent == null) {
-            throw new IllegalArgumentException("The storage isn't existent.");
-        }
-        return storageContent.getCapacity();
-    }
-
-    public BigDecimal getStorageActuallySize() {
-        if (storageContent == null) {
-            throw new IllegalArgumentException("The storage isn't existent.");
-        }
-
-        BigDecimal sizeActually = BigDecimal.ZERO;
-        for (Content k : this.getStorage().getListContent()) {
-            sizeActually = sizeActually.add(((MediaContent) k).getSize());
-        }
-
-        return sizeActually;
-    }
-
-    public BigDecimal getStorageActuallySizeInPercent() {
-        if (storageContent == null) {
-            throw new IllegalArgumentException("The storage isn't existent.");
-        }
-
-        /**
-         BigDecimal sizeActually = BigDecimal.ZERO;
-         for (Content k : this.getStorage().getListContent()) {
-         sizeActually = sizeActually.add(((MediaContent) k).getSize());
-         }
-         */
-        return (this.getStorageActuallySize().multiply(new BigDecimal("100"))).divide(this.getStorageTotalSize(), 2, BigDecimal.ROUND_DOWN);
-    }
-
     public long getStorageCount() {
         if (storageContent == null) {
             throw new IllegalArgumentException("The storage isn't existent.");
         }
         return storageContent.getAccessCount();
-    }
-
-    public StorageContent getStorage() {
-        return storageContent;
     }
 
     public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encording, String holder, long bitrate, Duration length, Collection<Tag> tags, long accessCount, Uploader uploader, Date uploadDate, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
@@ -197,34 +160,6 @@ public class BusinessLogic implements Observable {
         this.getStorage().getMapAddressContent().remove(oldContentAddress);//replace(address, newContent);
         this.getStorage().getMapAddressContent().put(address, newContent);//replace(address, newContent);
         this.notifyObserver();
-        return true;
-    }
-
-    private Uploader addUploaderForContent(String name) {
-        for (Uploader k : listUploader) {
-            if (name.equals(k.getName())) {
-                return k;
-            }
-        }
-
-        Uploader uploader = new UploaderImpl(name);
-        listUploader.add(uploader);
-        return uploader;
-    }
-
-    private String generateAddress(MediaType mediaType, String uploader, int width, int height) {
-        String address = mediaType.toString() + "#" + uploader.replace(' ', '_') + "#" + width + "x" + height + "+" + addressCounter;
-        addressCounter++;
-        return address;
-    }
-
-    private BigDecimal generateSize(long samplingRate, long bitrate, int width, int height) {
-        BigDecimal size = BigDecimal.valueOf(width + height);
-        return size;
-    }
-
-    private boolean upload(Content content) {
-        storageContent.getListContent().add(content);
         return true;
     }
 
@@ -376,51 +311,6 @@ public class BusinessLogic implements Observable {
         return true;
     }
 
-    public Content getFile(int index) {
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-
-        this.notifyObserver();
-        return storageContent.getListContent().get(index);
-    }
-
-    public Content getContent(String address) {
-        if (address == null) {
-            throw new NullPointerException("No input!");
-        }
-
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-
-        for (Content k : this.storageContent.getListContent()) {
-            if (k.getAddress().equals(address)) {
-                this.notifyObserver();
-                return k;
-            }
-        }
-        throw new IllegalArgumentException("invalid address");
-    }
-
-    public List<Content> getFileByTag(Tag tag) {
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-        List<Content> listContent = new ArrayList<>();
-
-        for (Content k : storageContent.getListContent()) {
-            for (Tag l : k.getTags()) {
-                if (l.equals(tag)) {
-                    listContent.add(k);
-                }
-            }
-        }
-
-        this.notifyObserver();
-        return listContent;
-    }
-
     public List<Tag> showAvailableTags() {
         if (storageContent == null) {
             throw new NullPointerException("Storage isn't available.");
@@ -456,26 +346,6 @@ public class BusinessLogic implements Observable {
         }
 
         return listNotAvailableTags;
-    }
-
-    public List<Content> getFileByType(MediaType type) {
-
-        this.notifyObserver();
-        return storageContent.getMapMediaTypeContent().get(type);
-    }
-
-    public List<Content> getFiles() throws NullPointerException {
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-
-        this.notifyObserver();
-        return storageContent.getListContent();
-    }
-
-    public List<Content> getFilesByType(String type) {
-        this.notifyObserver();
-        return storageContent.getMapMediaTypeContent().get(MediaType.valueOf(type));
     }
 
     public boolean createUploader(String name) {
@@ -534,29 +404,6 @@ public class BusinessLogic implements Observable {
         return false;
     }
 
-    public List<Uploader> getUploaders() {
-        return listUploader;
-    }
-
-    public Map<Uploader, Integer> getUploadersWithContentAmount() {
-        int count = 0;
-        Map<Uploader, Integer> mapUploadersWithContentAmount = new HashMap<>();
-        for (Uploader k1 : this.getUploaders()) {
-            for (Content k2 : this.getStorage().getListContent()) {
-                if (k1.equals(((Uploadable) k2).getUploader())) {
-                    count++;
-                }
-            }
-            mapUploadersWithContentAmount.put(k1, count);
-            count = 0;
-        }
-        return mapUploadersWithContentAmount;
-    }
-
-    public Uploader getUploader(int index) {
-        return listUploader.get(index);
-    }
-
     public boolean availableUploader(String name) {
         for (Uploader tmpUploader : listUploader) {
             if (tmpUploader.getName().equals(name)) {
@@ -589,20 +436,186 @@ public class BusinessLogic implements Observable {
         }
     }
 
-    public boolean save(){
-        ObjectOutputStream oos = null;
-        FileOutputStream fos = null;
+    public boolean checkIsSizeReached(Content content) {
+        int checked = this.getStorage().getCapacity().compareTo(this.getStorageActuallySize().add(((MediaContent) content).getSize()));
+        return !(checked >= 0);
+    }
+
+    public boolean saveStorage(String address) {
         try {
-            fos = new FileOutputStream("C:/test.ser");
-            oos = new ObjectOutputStream(fos);
+            this.persistence.save(address, this.storageContent);
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
-        catch (IOException e) {
-            e.printStackTrace();
+        return true;
+    }
+
+    public boolean loadStorage(String address) {
+        try {
+            if (this.persistence.load(address) instanceof Storage) {
+                this.storageContent = (StorageContent) this.persistence.load(address);
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        } catch (ClassNotFoundException e) {
+            System.err.println(e.getMessage());
         }
-        finally {
-            if (oos != null) try { oos.close(); } catch (IOException e) {}
-            if (fos != null) try { fos.close(); } catch (IOException e) {}
+
+        return true;
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                  //
+    //                                                                                                  //
+    //                                      GETTERS                                                     //
+    //                                                                                                  //
+    //                                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public List<Uploader> getUploaders() {
+        return listUploader;
+    }
+
+    public Map<Uploader, Integer> getUploadersWithContentAmount() {
+        int count = 0;
+        Map<Uploader, Integer> mapUploadersWithContentAmount = new HashMap<>();
+        for (Uploader k1 : this.getUploaders()) {
+            for (Content k2 : this.getStorage().getListContent()) {
+                if (k1.equals(((Uploadable) k2).getUploader())) {
+                    count++;
+                }
+            }
+            mapUploadersWithContentAmount.put(k1, count);
+            count = 0;
         }
+        return mapUploadersWithContentAmount;
+    }
+
+    public Uploader getUploader(int index) {
+        return listUploader.get(index);
+    }
+
+    public BigDecimal getStorageTotalSize() {
+        if (storageContent == null) {
+            throw new IllegalArgumentException("The storage isn't existent.");
+        }
+        return storageContent.getCapacity();
+    }
+
+    public BigDecimal getStorageActuallySize() {
+        if (storageContent == null) {
+            throw new IllegalArgumentException("The storage isn't existent.");
+        }
+
+        BigDecimal sizeActually = BigDecimal.ZERO;
+        for (Content k : this.getStorage().getListContent()) {
+            sizeActually = sizeActually.add(((MediaContent) k).getSize());
+        }
+
+        return sizeActually;
+    }
+
+    public BigDecimal getStorageActuallySizeInPercent() {
+        if (storageContent == null) {
+            throw new IllegalArgumentException("The storage isn't existent.");
+        }
+        return (this.getStorageActuallySize().multiply(new BigDecimal("100"))).divide(this.getStorageTotalSize(), 2, BigDecimal.ROUND_DOWN);
+    }
+
+    public List<Content> getFileByType(MediaType type) {
+
+        this.notifyObserver();
+        return storageContent.getMapMediaTypeContent().get(type);
+    }
+
+    public List<Content> getFiles() throws NullPointerException {
+        if (storageContent == null) {
+            throw new NullPointerException("Storage isn't available.");
+        }
+
+        this.notifyObserver();
+        return storageContent.getListContent();
+    }
+
+    public List<Content> getFilesByType(String type) {
+        this.notifyObserver();
+        return storageContent.getMapMediaTypeContent().get(MediaType.valueOf(type));
+    }
+
+    public StorageContent getStorage() {
+        return storageContent;
+    }
+
+    public Content getFile(int index) {
+        if (storageContent == null) {
+            throw new NullPointerException("Storage isn't available.");
+        }
+
+        this.notifyObserver();
+        return storageContent.getListContent().get(index);
+    }
+
+    public Content getContent(String address) {
+        if (address == null) {
+            throw new NullPointerException("No input!");
+        }
+
+        if (storageContent == null) {
+            throw new NullPointerException("Storage isn't available.");
+        }
+
+        for (Content k : this.storageContent.getListContent()) {
+            if (k.getAddress().equals(address)) {
+                this.notifyObserver();
+                return k;
+            }
+        }
+        throw new IllegalArgumentException("invalid address");
+    }
+
+    public List<Content> getFileByTag(Tag tag) {
+        if (storageContent == null) {
+            throw new NullPointerException("Storage isn't available.");
+        }
+        List<Content> listContent = new ArrayList<>();
+
+        for (Content k : storageContent.getListContent()) {
+            for (Tag l : k.getTags()) {
+                if (l.equals(tag)) {
+                    listContent.add(k);
+                }
+            }
+        }
+
+        this.notifyObserver();
+        return listContent;
+    }
+
+    private Uploader addUploaderForContent(String name) {
+        for (Uploader k : listUploader) {
+            if (name.equals(k.getName())) {
+                return k;
+            }
+        }
+
+        Uploader uploader = new UploaderImpl(name);
+        listUploader.add(uploader);
+        return uploader;
+    }
+
+    private String generateAddress(MediaType mediaType, String uploader, int width, int height) {
+        String address = mediaType.toString() + "#" + uploader.replace(' ', '_') + "#" + width + "x" + height + "+" + addressCounter;
+        addressCounter++;
+        return address;
+    }
+
+    private BigDecimal generateSize(long samplingRate, long bitrate, int width, int height) {
+        BigDecimal size = BigDecimal.valueOf(width + height);
+        return size;
+    }
+
+    private boolean upload(Content content) {
+        storageContent.getListContent().add(content);
         return true;
     }
 
@@ -640,10 +653,5 @@ public class BusinessLogic implements Observable {
         }
 
         return mediaContent;
-    }
-
-    public boolean checkIsSizeReached(Content content) {
-        int checked = this.getStorage().getCapacity().compareTo(this.getStorageActuallySize().add(((MediaContent) content).getSize()));
-        return !(checked >= 0);
     }
 }
