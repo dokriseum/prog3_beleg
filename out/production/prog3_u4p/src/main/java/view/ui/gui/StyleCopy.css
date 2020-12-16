@@ -1,0 +1,19 @@
+.borderlessTextField {
+    -fx-background-color: transparent;
+}
+
+.PaneStyle {
+    -fx-background-color: #aaaaaa;
+}
+
+.TextFieldStyle {
+    -fx-background-color: 888888;
+}
+
+.root {
+    -fx-accent: #343434;
+    -fx-focus-color: -fx-accent;
+    -fx-base: #434343;
+    -fx-control-inner-background: derive(-fx-base, 25%);
+    -fx-control-inner-background-alt: -fx-control-inner-background;
+}
