@@ -7,7 +7,7 @@ public class PersistenceMain2 {
         try {
             System.out.println("###");
             PersistenceBusinessLogic pbl = new PersistenceBusinessLogic();
-            BusinessLogic bl2 = pbl.load("daten.daten");
+            BusinessLogic bl2 = pbl.load("daten.file");
             for (Content k : bl2.getStorage().getListContent()) {
                 System.out.println(k.toString());
             }
