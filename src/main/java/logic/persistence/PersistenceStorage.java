@@ -5,7 +5,7 @@ import models.storage.Storage;
 
 import java.io.*;
 
-public class PersistenceStorage implements Persistence {
+public class PersistenceStorage implements Persistence, Serializable {
     private BusinessLogic businessLogic;
 
     public PersistenceStorage(BusinessLogic businessLogic) {
