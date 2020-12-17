@@ -9,23 +9,24 @@ package logic;
 import exceptions.SizeReachedException;
 import logic.observer.Observable;
 import logic.observer.Observer;
-import logic.persistence.Persistence;
+import logic.persistence.PersistenceStorage;
 import models.mediaDB.*;
 import models.storage.MediaType;
 import models.storage.Storage;
 import models.storage.StorageContent;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.*;
 
-public class BusinessLogic implements Observable {
+public class BusinessLogic implements Observable, Serializable {
     private StorageContent storageContent;
     private List<Uploader> listUploader;
     private long addressCounter;
     private List<Observer> observers;
-    private Persistence persistence = new Persistence(this);
+    private PersistenceStorage persistence = new PersistenceStorage(this);
 
     public BusinessLogic() {
         this.storageContent = new StorageContent(new BigDecimal("1"));
