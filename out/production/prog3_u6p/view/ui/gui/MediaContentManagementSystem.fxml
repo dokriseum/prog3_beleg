@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane fx:id="mcmsMain_AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ui.gui.HubController">
+    <children>
+        <VBox fx:id="mcmsMain_VBOX_1" stylesheets="@Style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+
+                <MenuBar fx:id="mcmsMain_MenuBar" minWidth="Infinity" stylesheets="@Style.css">
+                    <menus>
+                        <Menu fx:id="mcmsMain_File" mnemonicParsing="false" text="File">
+                            <items>
+                                <MenuItem fx:id="mcmsMain_FileUpload" mnemonicParsing="false" onAction="#uploadContent" text="Upload" />
+                                <MenuItem fx:id="mcmsMain_FileClose" mnemonicParsing="false" onAction="#close" text="Close" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="mcmsMain_Edit" mnemonicParsing="false" text="Edit">
+                            <items>
+                                <MenuItem fx:id="mcmsMain_DummyAddContent" mnemonicParsing="false" onAction="#dummyAddMediaContent" text="Add Media Content for Test" />
+                                <MenuItem fx:id="mcmsMain_DeleteContent" mnemonicParsing="false" onAction="#deleteMediaContent" text="Delete Media Content" />
+                                <MenuItem fx:id="mcmsMain_EditUpdatedContent" mnemonicParsing="false" onAction="#updateContent" text="Updated Media Content" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="mcmsMain_View" mnemonicParsing="true" text="View">
+                            <items>
+                                <MenuItem fx:id="mcmsMain_ViewShowContent" mnemonicParsing="true" onAction="#showContent" text="Show Media Content" />
+                                <MenuItem fx:id="mcmsMain_ViewShowUploaders" mnemonicParsing="true" onAction="#showUploaders" text="Show Uploader" />
+                            </items>
+                        </Menu>
+                        <Menu fx:id="mcmsMain_Help" mnemonicParsing="true" text="Help">
+                            <items>
+                                <MenuItem fx:id="mcmsMain_HelpAbout" mnemonicParsing="false" onAction="#about" text="About" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                  <TabPane fx:id="mcmsMain_TabPane" stylesheets="@Style.css" tabClosingPolicy="UNAVAILABLE">
+                      <tabs>
+                          <Tab fx:id="mcmsMain_TabMCMS" text="MCMS">
+                              <content>
+                                  <AnchorPane fx:id="mcmsMain_MCMS_AnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                      <children>
+                                          <Pane fx:id="mcmsMain_MCMS_Pane" prefHeight="672.0" prefWidth="1280.0" stylesheets="@Style.css">
+                                              <children>
+                                                  <HBox fx:id="mcmsMain_MCMS_HBox_1" alignment="CENTER" prefHeight="667.0" prefWidth="1280.0" spacing="50.0" stylesheets="@Style.css">
+                                                      <padding>
+                                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                      </padding>
+                                                      <children>
+                                                          <VBox fx:id="mcmsMain_MCMS_VBox_1" alignment="CENTER" prefHeight="647.0" prefWidth="1272.0" spacing="25.0" stylesheets="@Style.css">
+                                                              <children>
+                                                                  <TextField fx:id="mcmsTabMCMS_TextField" editable="false" />
+                                                                  <TextArea fx:id="mcmsTabMCMS_TextArea" editable="false" prefHeight="585.0" prefWidth="1250.0">
+                                                                      <opaqueInsets>
+                                                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                                      </opaqueInsets>
+                                                                  </TextArea>
+                                                              </children>
+                                                              <opaqueInsets>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                              </opaqueInsets>
+                                                              <HBox.margin>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                              </HBox.margin>
+                                                              <padding>
+                                                                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                              </padding>
+                                                          </VBox>
+                                                      </children>
+                                                  </HBox>
+                                              </children>
+                                          </Pane>
+                                      </children>
+                                  </AnchorPane>
+                              </content>
+                          </Tab>
+                          <Tab fx:id="mcmsMain_TabMirrorText" text="Mirror Text">
+                              <content>
+                                  <AnchorPane fx:id="mcmsMain_MirrorText_AnchorPane" prefHeight="720.0" prefWidth="1260.0">
+                                      <children>
+                                            <HBox fx:id="mcmsMain_MirrorText_HBox_1" alignment="CENTER" spacing="50.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <children>
+                                                    <VBox fx:id="mcmsMain_MirrorText_VBox_1" alignment="TOP_CENTER" spacing="5.0">
+                                                        <children>
+                                                            <Button fx:id="mcmsTabMirrorText_buttonMirrorToRight" mnemonicParsing="true" onAction="#mirrorToRight" stylesheets="@Style.css" text="Mirror to Right" />
+                                                            <TextArea fx:id="mcmsTabMirrorText_textAreaĹeft" VBox.vgrow="ALWAYS" />
+                                                        </children>
+                                                        <padding>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                        </padding>
+                                                        <HBox.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                        </HBox.margin>
+                                                    </VBox>
+                                                    <VBox fx:id="mcmsMain_MirrorText_VBox_2" alignment="TOP_CENTER" spacing="5.0">
+                                                        <children>
+                                                            <Button fx:id="mcmsTabMirrorText_buttonMirrorToLeft" mnemonicParsing="true" onAction="#mirrorToLeft" text="Mirror To Left" />
+                                                            <TextArea fx:id="mcmsTabMirrorText_textAreaRight" VBox.vgrow="ALWAYS" />
+                                                        </children>
+                                                        <HBox.margin>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                        </HBox.margin>
+                                                        <padding>
+                                                            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                        </padding>
+                                                    </VBox>
+                                                </children>
+                                                <padding>
+                                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                                </padding>
+                                 <opaqueInsets>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </opaqueInsets>
+                                            </HBox>
+                                      </children>
+                                  </AnchorPane>
+                              </content>
+                          </Tab>
+                      </tabs>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </VBox.margin>
+                  </TabPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>

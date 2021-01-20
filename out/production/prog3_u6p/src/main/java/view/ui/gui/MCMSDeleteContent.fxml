@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="640.0" prefWidth="640.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ui.gui.HubControllerDeleteContent">
+    <children>
+        <Pane layoutX="10.0" layoutY="10.0" stylesheets="@Style.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox prefHeight="630.0" prefWidth="630.0">
+                    <children>
+                        <VBox spacing="5.0" stylesheets="@Style.css" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Uploader:" />
+                                <TextField fx:id="textFieldUploader" editable="false" prefHeight="25.0" prefWidth="164.0" />
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Bitrate:" />
+                                <TextField fx:id="textFieldBitrate" editable="false" prefHeight="25.0" />
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Length:" />
+                                <HBox prefHeight="32.0" spacing="5.0">
+                                    <children>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Hours:" />
+                                                <TextField fx:id="textFieldLengthHours" editable="false" prefHeight="25.0" prefWidth="164.0" />
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Minutes:" />
+                                                <TextField fx:id="textFieldLengthMinutes" editable="false" prefHeight="25.0" prefWidth="164.0" />
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Seconds:" />
+                                                <TextField fx:id="textFieldLengthSeconds" editable="false" prefHeight="25.0" prefWidth="164.0" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <padding>
+                                        <Insets left="15.0" />
+                                    </padding>
+                                </HBox>
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Video Encording:" />
+                                <TextField fx:id="textFieldVideoEncoding" editable="false" prefHeight="25.0" />
+                                <Label prefHeight="7.0" text="Format:" />
+                                <HBox prefHeight="32.0" spacing="5.0">
+                                    <children>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Width:" />
+                                                <TextField fx:id="textFieldFormatWidth" editable="false" prefHeight="25.0" prefWidth="164.0" />
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Height:" />
+                                                <TextField fx:id="textFieldFormatHeight" editable="false" prefHeight="25.0" prefWidth="164.0" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets />
+                                    </opaqueInsets>
+                                    <padding>
+                                        <Insets left="15.0" />
+                                    </padding>
+                                </HBox>
+                                <Label prefHeight="7.0" text="Audio Encoding:" />
+                                <TextField fx:id="textFieldAudioEncoding" editable="false" prefHeight="25.0" />
+                                <Label prefHeight="7.0" text="Samlingrate:" />
+                                <TextField fx:id="textFieldSamplingrate" editable="false" prefHeight="25.0" />
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Interaction type:" />
+                                <TextField fx:id="textFieldInteractionType" editable="false" prefHeight="25.0" prefWidth="164.0" />
+                                <Label prefHeight="7.0" text="Licensor:" />
+                                <TextField fx:id="textFieldLicensor" editable="false" prefHeight="25.0" />
+                            </children>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </padding>
+                            <HBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                            </HBox.margin>
+                        </VBox>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <children>
+                                <VBox fx:id="vBoxTags" spacing="5.0" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Label prefHeight="7.0" prefWidth="164.0" text="Tags:" />
+                                        <CheckBox fx:id="checkBoxTagAnimal" mnemonicParsing="false" text="Animal" />
+                                        <CheckBox fx:id="checkBoxTagTutorial" mnemonicParsing="false" text="Tutorial" />
+                                        <CheckBox fx:id="checkBoxTagLifestyle" mnemonicParsing="false" text="Lifestyle" />
+                                        <CheckBox fx:id="checkBoxTagNews" mnemonicParsing="false" text="News" />
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                                </VBox>
+                                <ListView fx:id="viewListContentAddress" VBox.vgrow="ALWAYS" />
+                                <HBox alignment="BOTTOM_RIGHT" spacing="5.0">
+                                    <children>
+                                        <Button fx:id="buttonCancel" cancelButton="true" mnemonicParsing="false" onAction="#clickButtonCancel" text="Cancel" />
+                                        <Button fx:id="buttonDelete" mnemonicParsing="false" onAction="#clickButtonDelete" text="Delete" />
+                                    </children>
+                                    <padding>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </padding>
+                                    <VBox.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                    </VBox.margin>
+                                </HBox>
+                            </children>
+                            <HBox.margin>
+                                <Insets />
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </Pane>
+    </children>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+    </padding>
+</AnchorPane>
