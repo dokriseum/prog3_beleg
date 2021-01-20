@@ -21,8 +21,8 @@ import java.util.Date;
 
 public class Input {
     private StringReader stringReader;
-    private InputStreamReader inputStreamReader;
-    private BufferedReader bufferedReader;
+    private InputStreamReader isr;
+    private BufferedReader br;
     private OutputStreamWriter osw;
     private BufferedWriter bw;
     private StringWriter sw;
@@ -64,20 +64,20 @@ public class Input {
     public void input() {
         try {
             if (testString == null) {
-                inputStreamReader = new InputStreamReader(System.in);
-                bufferedReader = new BufferedReader(inputStreamReader);
+                isr = new InputStreamReader(System.in);
+                br = new BufferedReader(isr);
                 osw = new OutputStreamWriter(System.out);
                 bw = new BufferedWriter(osw);
             } else {
                 stringReader = new StringReader(testString);
-                bufferedReader = new BufferedReader(stringReader);
+                br = new BufferedReader(stringReader);
                 sw = new StringWriter();
                 bw = new BufferedWriter(sw);
             }
             while (!exitCondition) {
                 bw.write(this.outputText());//System.out.println(this.outputText());
                 bw.flush();
-                inputString = bufferedReader.readLine();
+                inputString = br.readLine();
 
                 if (inputString == null)
                     break;
@@ -101,6 +101,40 @@ public class Input {
                     System.err.println(e.getMessage());
                 } catch (NotImplementsException e) {
                     System.err.println(e.getMessage());
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void input(InputStream streamInput, OutputStream streamOutput) {
+        try {
+            this.isr = new InputStreamReader(streamInput);
+            this.br = new BufferedReader(this.isr);
+            this.osw = new OutputStreamWriter(streamOutput);
+            this.bw = new BufferedWriter(this.osw);
+            while (!exitCondition) {
+                bw.write(this.outputText());//System.out.println(this.outputText());
+                //bw.flush();
+                System.out.println("BR 1: " + br.readLine());
+                inputString = br.readLine();
+
+                if (inputString == null)
+                    break;
+                inputEvent = null;
+                try {
+                    inputEvent = inputMapping(inputString);
+                    if (this.handler != null) {
+                        handler.handle(inputEvent);
+                    }
+                } catch (IllegalArgumentException e) {
+                    bw.write(e.getMessage());
+                    bw.flush();
+                } catch (NotImplementsException e) {
+                    bw.write(e.getMessage());
+                    bw.flush();
                 }
             }
 
