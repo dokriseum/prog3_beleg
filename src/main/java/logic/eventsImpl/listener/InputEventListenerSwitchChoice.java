@@ -13,11 +13,23 @@ import logic.events.InputEventListener;
 import logic.eventsImpl.InputEventSwitchChoice;
 import view.ui.cli.Input;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 public class InputEventListenerSwitchChoice implements InputEventListener {
     private BusinessLogic businessLogic;
+    private DataInputStream dis = null;
+    private DataOutputStream dos = null;
 
     public InputEventListenerSwitchChoice(BusinessLogic businessLogic) {
         this.businessLogic = businessLogic;
+    }
+
+    public InputEventListenerSwitchChoice(BusinessLogic businessLogic, DataInputStream dis, DataOutputStream dos) {
+        this.businessLogic = businessLogic;
+        this.businessLogic = businessLogic;
+        this.dis = dis;
+        this.dos = dos;
     }
 
     @Override

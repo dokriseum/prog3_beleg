@@ -32,6 +32,8 @@ public class Input {
     private InputEventHandler handler;
     private Choice inputChoice;
     private InputEvent inputEvent;
+    private DataInputStream streamInputData;
+    private DataOutputStream streamOutputData;
 
     public Choice getInputChoice() {
         return inputChoice;
@@ -48,6 +50,11 @@ public class Input {
         this.testString = testString;
     }
 
+    public Input(InputStream streamInput, OutputStream streamOutput) {
+        this.streamInputData = new DataInputStream(streamInput);
+        this.streamOutputData = new DataOutputStream(streamOutput);
+    }
+
     public boolean setTestString(String testString) {
         this.testString = testString;
         return true;
@@ -59,6 +66,49 @@ public class Input {
 
     public void setHandler(InputEventHandler handler) {
         this.handler = handler;
+    }
+
+
+    public boolean io() {
+        try {
+            while (!exitCondition) {
+                String output = this.outputText();
+                this.streamOutputData.writeUTF(output);
+                System.out.println("InputOutput -> output");
+                System.out.println("input top");
+                inputString = streamInputData.readUTF();
+
+                System.out.println(inputString);
+                if (inputString == null)
+                    break;
+                inputEvent = null;
+                try {
+                    inputEvent = inputMapping(inputString);
+                    if (this.handler != null) {
+                        handler.handle(inputEvent);
+                    }
+                    if (testString == null) {
+                        if ((inputEvent instanceof InputEventShowMedia) ||
+                                (inputEvent instanceof InputEventShowUploader) ||
+                                (inputEvent instanceof InputEventAddMedia) ||
+                                (inputEvent instanceof InputEventAddUploader) ||
+                                (inputEvent instanceof InputEventDeleteMedia) ||
+                                (inputEvent instanceof InputEventDeleteUploader)) {
+                            //this.waitingContinue();
+                        }
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getMessage());
+                } catch (NotImplementsException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("InputOutput -> input");
+        return true;
     }
 
     public void input() {

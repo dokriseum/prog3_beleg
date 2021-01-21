@@ -34,6 +34,8 @@ public class InputOutput {
     private InputEvent inputEvent;
     private InputStream streamInput;
     private OutputStream streamOutput;
+    private DataInputStream streamInputData;
+    private DataOutputStream streamOutputData;
 
     public Choice getInputChoice() {
         return inputChoice;
@@ -46,6 +48,8 @@ public class InputOutput {
     public InputOutput(InputStream streamInput, OutputStream streamOutput) {
         this.streamInput = streamInput;
         this.streamOutput = streamOutput;
+        this.streamInputData = new DataInputStream(streamInput);
+        this.streamOutputData = new DataOutputStream(streamOutput);
     }
 
     public InputOutput(String testString) {
@@ -65,17 +69,15 @@ public class InputOutput {
         this.handler = handler;
     }
 
-    public void input() {
+    public void io() {
         try {
             this.isr = new InputStreamReader(streamInput);
             this.br = new BufferedReader(this.isr);
             this.osw = new OutputStreamWriter(streamOutput);
             this.bw = new BufferedWriter(this.osw);
+            streamOutputData.writeBytes(this.outputText());
             while (!exitCondition) {
-                bw.write(this.outputText());//System.out.println(this.outputText());
-                bw.flush();
-                System.out.println("BR 1: " + br.readLine());
-                inputString = br.readLine();
+                inputString = streamInputData.readUTF();
 
                 if (inputString == null)
                     break;
@@ -86,25 +88,68 @@ public class InputOutput {
                         handler.handle(inputEvent);
                     }
                 } catch (IllegalArgumentException e) {
-                    bw.write(e.getMessage());
-                    bw.flush();
+                    streamOutputData.writeUTF(e.getMessage());
+                    streamOutputData.flush();
                 } catch (NotImplementsException e) {
-                    bw.write(e.getMessage());
-                    bw.flush();
+                    streamOutputData.writeUTF(e.getMessage());
+                    streamOutputData.flush();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean input() {
+        try {
+            while (!exitCondition) {
+                String output = this.outputText();
+                this.streamOutputData.writeUTF(output);
+                System.out.println("InputOutput -> output");
+                System.out.println("input top");
+                inputString = streamInputData.readUTF();
+
+                System.out.println(inputString);
+                if (inputString == null)
+                    break;
+                inputEvent = null;
+                try {
+                    inputEvent = inputMapping(inputString);
+                    if (this.handler != null) {
+                        handler.handle(inputEvent);
+                    }
+                    if (testString == null) {
+                        if ((inputEvent instanceof InputEventShowMedia) ||
+                                (inputEvent instanceof InputEventShowUploader) ||
+                                (inputEvent instanceof InputEventAddMedia) ||
+                                (inputEvent instanceof InputEventAddUploader) ||
+                                (inputEvent instanceof InputEventDeleteMedia) ||
+                                (inputEvent instanceof InputEventDeleteUploader)) {
+                            //this.waitingContinue();
+                        }
+                    }
+                } catch (IllegalArgumentException e) {
+                    System.err.println(e.getMessage());
+                } catch (NotImplementsException e) {
+                    System.err.println(e.getMessage());
                 }
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("InputOutput -> input");
+        return true;
     }
 
-    public void output() {
-
+    public boolean output() throws IOException {
+        String output = this.outputText();
+        this.streamOutputData.writeUTF(output);
+        System.out.println("InputOutput -> output");
+        return true;
     }
 
     public InputEvent inputMapping(String inputString) throws IllegalArgumentException, NotImplementsException {
-
         if (inputString.equals("exit")) {
             exitCondition = true;
             return new InputEventExit(this, "InputEventExit");

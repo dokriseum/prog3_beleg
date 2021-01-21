@@ -7,12 +7,23 @@ import logic.events.InputEvent;
 import logic.events.InputEventListener;
 import logic.eventsImpl.InputEventAddMedia;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 
 public class InputEventListenerAddMedia implements InputEventListener {
     private BusinessLogic businessLogic;
+    private java.io.DataInputStream dis = null;
+    private DataOutputStream dos = null;
 
     public InputEventListenerAddMedia(BusinessLogic businessLogic) {
         this.businessLogic = businessLogic;
+    }
+
+    public InputEventListenerAddMedia(BusinessLogic businessLogic, DataInputStream dis, DataOutputStream dos) {
+        this.businessLogic = businessLogic;
+        this.dis = dis;
+        this.dos = dos;
     }
 
     @Override

@@ -1,4 +1,3 @@
-import logic.BusinessLogic;
 import logic.network.media.MediaServer;
 
 import java.io.IOException;
@@ -13,10 +12,10 @@ import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) {
-        try (ServerSocket serverSocket = new ServerSocket(9000);) {
+        try (ServerSocket serverSocket = new ServerSocket(3004);) {
             while (true) {
                 Socket socket = serverSocket.accept();
-                MediaServer s = new MediaServer(socket, new BusinessLogic());
+                MediaServer s = new MediaServer(socket);
                 System.out.println("new client@" + socket.getInetAddress() + ":" + socket.getPort());
                 new Thread(s).start();
             }

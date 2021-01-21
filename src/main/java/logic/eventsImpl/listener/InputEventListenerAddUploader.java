@@ -12,11 +12,22 @@ import logic.events.InputEvent;
 import logic.events.InputEventListener;
 import logic.eventsImpl.InputEventAddUploader;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+
 public class InputEventListenerAddUploader implements InputEventListener {
     private BusinessLogic businessLogic;
+    private java.io.DataInputStream dis = null;
+    private DataOutputStream dos = null;
 
     public InputEventListenerAddUploader(BusinessLogic businessLogic) {
         this.businessLogic = businessLogic;
+    }
+
+    public InputEventListenerAddUploader(BusinessLogic businessLogic, DataInputStream dis, DataOutputStream dos) {
+        this.businessLogic = businessLogic;
+        this.dis = dis;
+        this.dos = dos;
     }
 
     @Override
