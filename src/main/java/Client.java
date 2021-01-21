@@ -1,5 +1,6 @@
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 /**
  * @author Dustin Eikmeier
@@ -8,7 +9,8 @@ import java.net.Socket;
  */
 
 public class Client {
-    private static String command;
+    private static String input = new String();
+    private static String output = new String();
 
     public static void main(String[] args) {
 
@@ -16,13 +18,27 @@ public class Client {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
             do {
-                System.out.println(in.readUTF());
-                String input = br.readLine();
-                out.writeUTF(input);
-            } while (true);
+                output = in.readUTF();
+                System.out.println(output);
+                if ((input.startsWith("content"))
+                        || (input.startsWith("uploader"))
+                        || (input.startsWith("tag"))
+                ) {
+                    if (input.equals("tag")) {
+                        System.out.println(in.readUTF());
+                    }
+                    System.out.println(in.readUTF());
+                }
 
-        } catch (
-                IOException e) {
+                input = br.readLine();
+
+                out.writeUTF(input);
+            }
+            while (true);
+
+        } catch (SocketException e) {
+            System.err.println("connection lost");
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

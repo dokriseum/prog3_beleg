@@ -69,16 +69,16 @@ public class Input {
     }
 
 
-    public boolean io() {
+    public boolean ioServer() {
         try {
             while (!exitCondition) {
                 String output = this.outputText();
                 this.streamOutputData.writeUTF(output);
-                System.out.println("InputOutput -> output");
-                System.out.println("input top");
+                System.out.println("\nInputOutput -> output");
+
                 inputString = streamInputData.readUTF();
 
-                System.out.println(inputString);
+                System.out.println("\t" + inputString);
                 if (inputString == null)
                     break;
                 inputEvent = null;
@@ -222,6 +222,7 @@ public class Input {
                     return new InputEventSwitchChoice(this, "InputEventSwitchChoice", Choice.CONFIG);
                 case ":exit":
                     exitCondition = true;
+                    System.out.println("goodbye!");
                     System.exit(0);
                 default:
                     throw new IllegalArgumentException("wrong input");

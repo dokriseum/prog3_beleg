@@ -13,6 +13,7 @@ import view.ui.cli.Input;
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class MediaServer implements Runnable {
     private Socket socket;
@@ -24,15 +25,15 @@ public class MediaServer implements Runnable {
     private Observer o1 = new CheckSizePerCentObserver(businessLogic);
     private Observer o2 = new CheckTagsObserver(businessLogic);
     private InputEventHandler handler = new InputEventHandler();
-    private InputEventListener inputEventListenerAddMedia = new InputEventListenerAddMedia(businessLogic);
-    private InputEventListener inputEventListenerAddUploader = new InputEventListenerAddUploader(businessLogic);
-    private InputEventListener inputEventListenerDeleteMedia = new InputEventListenerDeleteMedia(businessLogic);
-    private InputEventListener inputEventListenerDeleteUploader = new InputEventListenerDeleteUploader(businessLogic);
-    private InputEventListener inputEventListenerOutput = new InputEventListenerOutput(businessLogic);
-    private InputEventListener inputEventListenerSwitchChoice = new InputEventListenerSwitchChoice(businessLogic);
-    private InputEventListener inputEventListenerExit = new InputEventListenerExit(businessLogic);
-    private InputEventListener inputEventListenerShowMedia = new InputEventListenerShowMedia(businessLogic);
-    private InputEventListener inputEventListenerShowUploader = new InputEventListenerShowUploader(businessLogic);
+    private InputEventListener inputEventListenerAddMedia;
+    private InputEventListener inputEventListenerAddUploader;
+    private InputEventListener inputEventListenerDeleteMedia;
+    private InputEventListener inputEventListenerDeleteUploader;
+    private InputEventListener inputEventListenerOutput;
+    private InputEventListener inputEventListenerSwitchChoice;
+    private InputEventListener inputEventListenerExit;
+    private InputEventListener inputEventListenerShowMedia;
+    private InputEventListener inputEventListenerShowUploader;
 
     public MediaServer(Socket socket) throws IOException {
         this.socket = socket;
@@ -45,7 +46,7 @@ public class MediaServer implements Runnable {
         try (DataOutputStream out = new DataOutputStream(socket.getOutputStream())) {
             try (DataInputStream in = new DataInputStream(socket.getInputStream())) {
                 this.io = new Input(in, out);
-                this.init();
+                this.init(in, out);
                 System.out.println("client@" + socket.getInetAddress() + ":" + socket.getPort() + " connected");
                 boolean error = this.executeSession(in, out);
                 if (error != true) {
@@ -55,6 +56,8 @@ public class MediaServer implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } catch (SocketException e) {
+            System.err.println("client closed connection");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,7 +65,7 @@ public class MediaServer implements Runnable {
     }
 
     private boolean executeSession(DataInputStream in, DataOutputStream out) throws IOException {
-        io.io();
+        io.ioServer();
 //        char command = in.readChar();
 //        if ('I' != command) return "unknown command: " + command;
 //        int bookId = in.readInt();
@@ -89,7 +92,16 @@ public class MediaServer implements Runnable {
         return true;
     }
 
-    private void init() {
+    private void init(DataInputStream in, DataOutputStream out) {
+        inputEventListenerAddMedia = new InputEventListenerAddMedia(businessLogic);
+        inputEventListenerAddUploader = new InputEventListenerAddUploader(businessLogic);
+        inputEventListenerDeleteMedia = new InputEventListenerDeleteMedia(businessLogic);
+        inputEventListenerDeleteUploader = new InputEventListenerDeleteUploader(businessLogic);
+        inputEventListenerOutput = new InputEventListenerOutput(businessLogic);
+        inputEventListenerSwitchChoice = new InputEventListenerSwitchChoice(businessLogic);
+        inputEventListenerExit = new InputEventListenerExit(businessLogic);
+        inputEventListenerShowMedia = new InputEventListenerShowMedia(businessLogic, in, out);
+        inputEventListenerShowUploader = new InputEventListenerShowUploader(businessLogic, in, out);
         handler.add(inputEventListenerAddMedia);
         handler.add(inputEventListenerAddUploader);
         handler.add(inputEventListenerDeleteMedia);

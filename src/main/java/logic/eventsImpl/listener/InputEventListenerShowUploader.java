@@ -14,6 +14,7 @@ import logic.eventsImpl.InputEventShowUploader;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 
 public class InputEventListenerShowUploader implements InputEventListener {
     private BusinessLogic businessLogic;
@@ -32,10 +33,18 @@ public class InputEventListenerShowUploader implements InputEventListener {
 
     @Override
     public void onInputEvent(InputEvent event) throws IllegalEventException {
-
         if (event instanceof InputEventShowUploader == false) {
             throw new IllegalEventException();
         }
-        System.out.println(businessLogic.getUploadersWithContentAmount());
+        if ((dos != null) && (dis != null)) {
+            try {
+                dos.writeUTF(businessLogic.getUploadersWithContentAmount().toString());
+                dos.flush();
+            } catch (IOException e) {
+                System.err.println(e.getStackTrace());
+            }
+        } else {
+            System.out.println(businessLogic.getUploadersWithContentAmount());
+        }
     }
 }
