@@ -1,13 +1,11 @@
 package logic.events;
 
-import exceptions.IllegalEventException;
 import logic.BusinessLogic;
-import logic.eventsImpl.InputEventAddUploader;
-import logic.eventsImpl.listener.InputEventListenerAddUploader;
-import logic.eventsImpl.listener.InputEventListenerOutput;
+import logic.event.InputEventAddUploader;
+import logic.event.listener.InputEventListenerAddUploader;
+import logic.event.listener.InputEventListenerOutput;
 import models.storage.StorageContent;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,13 +28,7 @@ class InputEventListenerTest {
     public void testGoodInputEventListenerAddUploader1() {
         InputEventListenerAddUploader listener = new InputEventListenerAddUploader(testBusinessLogic);
         InputEventAddUploader mockInputEventAddUploader = mock(InputEventAddUploader.class);
-
-        try {
-            listener.onInputEvent(mockInputEventAddUploader);
-        } catch (IllegalEventException e) {
-            Assertions.fail();
-        }
-
+        listener.onInputEvent(mockInputEventAddUploader);
         verify(mockInputEventAddUploader, atLeastOnce()).getEventUploader();
         verify(mockInputEventAddUploader, never()).getSource();
     }

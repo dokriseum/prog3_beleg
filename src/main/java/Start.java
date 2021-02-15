@@ -1,12 +1,12 @@
 import logic.BusinessLogic;
-import logic.events.InputEventListener;
-import logic.eventsImpl.InputEventHandler;
-import logic.eventsImpl.listener.*;
+import logic.event.InputEventHandler;
+import logic.event.InputEventListener;
+import logic.event.listener.*;
 import logic.observer.CheckSizePerCentObserver;
 import logic.observer.CheckTagsObserver;
 import logic.observer.Observer;
 import models.storage.StorageContent;
-import view.ui.cli.Input;
+import view.cli.Input;
 
 import java.math.BigDecimal;
 
@@ -24,9 +24,9 @@ public class Start {
         Observer o2 = new CheckTagsObserver(businessLogic);
         Input input = new Input();
         InputEventHandler handler = new InputEventHandler();
-        InputEventListener inputEventListenerAddMedia = new InputEventListenerAddMedia(businessLogic);
+        InputEventListener inputEventListenerAddMedia = new InputEventListenerAddContent(businessLogic);
         InputEventListener inputEventListenerAddUploader = new InputEventListenerAddUploader(businessLogic);
-        InputEventListener inputEventListenerDeleteMedia = new InputEventListenerDeleteMedia(businessLogic);
+        InputEventListener inputEventListenerDeleteMedia = new InputEventListenerDeleteContent(businessLogic);
         InputEventListener inputEventListenerDeleteUploader = new InputEventListenerDeleteUploader(businessLogic);
         InputEventListener inputEventListenerOutput = new InputEventListenerOutput(businessLogic);
         InputEventListener inputEventListenerSwitchChoice = new InputEventListenerSwitchChoice(businessLogic);

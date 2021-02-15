@@ -100,7 +100,7 @@ public class VideoImpl implements Video {
                 ", height=" + height +
                 ", encording='" + encording + '\'' +
                 ", bitrate=" + bitrate +
-                ", length=" + length +
+                ", length=" + this.getDurationAsString() +
                 ", size=" + size +
                 ", address='" + address + '\'' +
                 ", tags=" + tags +
@@ -108,5 +108,27 @@ public class VideoImpl implements Video {
                 ", uploader=" + uploader.getName() +
                 ", uploadDate=" + uploadDate +
                 '}';
+    }
+
+    private String getDurationAsString() {
+        StringBuilder duration = new StringBuilder();
+
+        if (length.toHours() < 10) {
+            duration.append(0);
+        }
+        duration.append(length.toHours());
+        duration.append(":");
+
+        if ((length.toMinutes() % 24) < 10) {
+            duration.append(0);
+        }
+        duration.append(length.toMinutes());
+        duration.append(":");
+        if ((length.getSeconds() % 60) < 10) {
+            duration.append(0);
+        }
+        duration.append(length.getSeconds() % 60);
+
+        return duration.toString();
     }
 }

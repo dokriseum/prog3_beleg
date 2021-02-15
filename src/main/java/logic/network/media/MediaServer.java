@@ -1,14 +1,14 @@
 package logic.network.media;
 
 import logic.BusinessLogic;
-import logic.events.InputEventListener;
-import logic.eventsImpl.InputEventHandler;
-import logic.eventsImpl.listener.*;
+import logic.event.InputEventHandler;
+import logic.event.InputEventListener;
+import logic.event.listener.*;
 import logic.observer.CheckSizePerCentObserver;
 import logic.observer.CheckTagsObserver;
 import logic.observer.Observer;
 import models.storage.StorageContent;
-import view.ui.cli.Input;
+import view.cli.Input;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -93,9 +93,9 @@ public class MediaServer implements Runnable {
     }
 
     private void init(DataInputStream in, DataOutputStream out) {
-        inputEventListenerAddMedia = new InputEventListenerAddMedia(businessLogic);
+        inputEventListenerAddMedia = new InputEventListenerAddContent(businessLogic);
         inputEventListenerAddUploader = new InputEventListenerAddUploader(businessLogic);
-        inputEventListenerDeleteMedia = new InputEventListenerDeleteMedia(businessLogic);
+        inputEventListenerDeleteMedia = new InputEventListenerDeleteContent(businessLogic);
         inputEventListenerDeleteUploader = new InputEventListenerDeleteUploader(businessLogic);
         inputEventListenerOutput = new InputEventListenerOutput(businessLogic);
         inputEventListenerSwitchChoice = new InputEventListenerSwitchChoice(businessLogic);

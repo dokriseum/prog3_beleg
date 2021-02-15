@@ -107,7 +107,7 @@ public class InteractiveVideoImpl implements InteractiveVideo {
                 ", \n\theight=" + height +
                 ", \n\tencording='" + encording + '\'' +
                 ", \n\tbitrate=" + bitrate +
-                ", \n\tlength=" + length +
+                ", \n\tlength=" + this.getDurationAsString() +
                 ", \n\tsize=" + size +
                 ", \n\taddress='" + address + '\'' +
                 ", \n\ttags=" + tags +
@@ -116,5 +116,27 @@ public class InteractiveVideoImpl implements InteractiveVideo {
                 ", \n\tuploadDate=" + uploadDate +
                 ", \n\ttype='" + type + '\'' +
                 "\n}\n";
+    }
+
+    private String getDurationAsString() {
+        StringBuilder duration = new StringBuilder();
+
+        if (length.toHours() < 10) {
+            duration.append(0);
+        }
+        duration.append(length.toHours());
+        duration.append(":");
+
+        if ((length.toMinutes() % 24) < 10) {
+            duration.append(0);
+        }
+        duration.append(length.toMinutes());
+        duration.append(":");
+        if ((length.getSeconds() % 60) < 10) {
+            duration.append(0);
+        }
+        duration.append(length.getSeconds() % 60);
+
+        return duration.toString();
     }
 }

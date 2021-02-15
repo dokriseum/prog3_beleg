@@ -7,6 +7,8 @@
 package logic;
 
 import exceptions.SizeReachedException;
+import logic.crud.Logic;
+import logic.crud.LogicCRUD;
 import logic.observer.Observable;
 import logic.observer.Observer;
 import logic.persistence.PersistenceStorage;
@@ -22,37 +24,47 @@ import java.time.Duration;
 import java.util.*;
 
 public class BusinessLogic implements Observable, Serializable {
-    private StorageContent storageContent;
+    private StorageContent storage;
     private List<Uploader> listUploader;
     private long addressCounter;
     private List<Observer> observers;
     private PersistenceStorage persistence = new PersistenceStorage(this);
+    private Logic lCRUD;
 
     public BusinessLogic() {
-        this.storageContent = new StorageContent(new BigDecimal("1"));
+        this.storage = new StorageContent(new BigDecimal("1"));
         this.listUploader = new ArrayList<>();
         addressCounter = 0;
         observers = new LinkedList<>();
         Content content = new MediaContentImpl(2, Duration.ofSeconds(234), BigDecimal.ZERO, null, null, 2);
-        this.storageContent.getListContent().add(content);
+        this.storage.getListContent().add(content);
     }
 
-    public BusinessLogic(StorageContent storageContent) {
-        if (storageContent == null) {
+    public BusinessLogic(StorageContent storage) {
+        if (storage == null) {
             throw new IllegalArgumentException("storage must not nullable");
         }
-        this.storageContent = storageContent;
+        this.storage = storage;
         this.listUploader = new ArrayList<>();
-        addressCounter = 0;
-        observers = new LinkedList<>();
+        this.addressCounter = 0;
+        this.observers = new LinkedList<>();
+        this.lCRUD = new LogicCRUD(this.storage);
     }
 
-    public long getStorageCount() {
-        if (storageContent == null) {
-            throw new IllegalArgumentException("The storage isn't existent.");
+    public BusinessLogic(BigDecimal size) {
+        if (storage == null) {
+            throw new IllegalArgumentException("storage must not nullable");
         }
-        return storageContent.getAccessCount();
+        this.storage = storage;
+        this.listUploader = new ArrayList<>();
+        this.addressCounter = 0;
+        this.observers = new LinkedList<>();
+        this.lCRUD = new LogicCRUD(this.storage);
     }
+
+    /*
+     * old
+     */
 
     public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encording, String holder, long bitrate, Duration length, Collection<Tag> tags, long accessCount, Uploader uploader, Date uploadDate, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
         Content content;
@@ -121,7 +133,7 @@ public class BusinessLogic implements Observable, Serializable {
     }
 
     public boolean editContent(String oldContentAddress, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, String uploader, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
-        Content oldContent = this.storageContent.getMapAddressContent().get(oldContentAddress);
+        Content oldContent = this.storage.getMapAddressContent().get(oldContentAddress);
         Content newContent;
         MediaType mediaType;
         if (oldContent instanceof LicensedAudioVideo) {
@@ -148,7 +160,7 @@ public class BusinessLogic implements Observable, Serializable {
             throw new SizeReachedException("capacity is reached");
         }
         int indexOldContent = 0;
-        for (Content k : this.storageContent.getMapMediaTypeContent().get(mediaType)) {
+        for (Content k : this.storage.getMapMediaTypeContent().get(mediaType)) {
             if (k.getAddress().equals(oldContent.getAddress())) {
                 break;
             } else {
@@ -156,98 +168,10 @@ public class BusinessLogic implements Observable, Serializable {
             }
         }
 
-        this.getStorage().getListContent().set(this.storageContent.getListContent().indexOf(oldContent), newContent);
+        this.getStorage().getListContent().set(this.storage.getListContent().indexOf(oldContent), newContent);
         this.getStorage().getMapMediaTypeContent().get(mediaType).set(indexOldContent, newContent);
         this.getStorage().getMapAddressContent().remove(oldContentAddress);//replace(address, newContent);
         this.getStorage().getMapAddressContent().put(address, newContent);//replace(address, newContent);
-        this.notifyObserver();
-        return true;
-    }
-
-    public boolean uploadFile(MediaContent content) {
-        if (content == null) {
-            throw new NullPointerException("No input!");
-        }
-
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-        try {
-            storageContent.getListContent().add(content);
-        } catch (IndexOutOfBoundsException e) {
-            System.err.println(e.getMessage());
-        }
-        this.notifyObserver();
-        return true;
-    }
-
-    public boolean uploadFile(Uploadable uploadable) {
-        if (uploadable == null) {
-            throw new NullPointerException("No input!");
-        }
-
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-
-        MediaContent content = this.parseContent(uploadable);
-
-        try {
-            storageContent.getListContent().add(content);
-        } catch (IndexOutOfBoundsException e) {
-            System.err.println(e.getMessage());
-        }
-        this.notifyObserver();
-        return true;
-    }
-
-    public boolean editFile(MediaContent oldContent, MediaContent newContent) {
-        if (oldContent == null || newContent == null) {
-            throw new NullPointerException("No input!");
-        }
-
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-
-        int index = storageContent.getListContent().indexOf(oldContent);
-
-        storageContent.getListContent().set(index, newContent);
-        this.notifyObserver();
-        return true;
-    }
-
-    public boolean editFile(Uploadable oldContentUploadable, Uploadable newContentUploadable) {
-        if (oldContentUploadable == null || newContentUploadable == null) {
-            throw new NullPointerException("No input!");
-        }
-
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-        MediaContent oldContent = this.parseContent(oldContentUploadable);
-        MediaContent newContent = this.parseContent(newContentUploadable);
-
-        int index = storageContent.getListContent().indexOf(oldContent);
-
-        storageContent.getListContent().set(index, newContent);
-        this.notifyObserver();
-        return true;
-    }
-
-    public boolean editFile(MediaContent oldContent, Uploadable newContentUploadable) {
-        if (oldContent == null || newContentUploadable == null) {
-            throw new NullPointerException("No input!");
-        }
-
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-        MediaContent newContent = this.parseContent(newContentUploadable);
-
-        int index = storageContent.getListContent().indexOf(oldContent);
-
-        storageContent.getListContent().set(index, newContent);
         this.notifyObserver();
         return true;
     }
@@ -257,28 +181,14 @@ public class BusinessLogic implements Observable, Serializable {
             throw new NullPointerException("No input!");
         }
 
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
         MediaContent oldContent = this.parseContent(oldContentUploadable);
 
-        int index = storageContent.getListContent().indexOf(oldContent);
+        int index = storage.getListContent().indexOf(oldContent);
 
-        storageContent.getListContent().set(index, newContent);
-        this.notifyObserver();
-        return true;
-    }
-
-    public boolean deleteFile(MediaContent content) {
-        if (content == null) {
-            throw new NullPointerException("No input!");
-        }
-
-        if (storageContent == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-
-        storageContent.getListContent().remove(content);
+        storage.getListContent().set(index, newContent);
         this.notifyObserver();
         return true;
     }
@@ -288,10 +198,10 @@ public class BusinessLogic implements Observable, Serializable {
             throw new NullPointerException("No input!");
         }
 
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
-        Content oldContent = this.storageContent.getMapAddressContent().get(address);
+        Content oldContent = this.storage.getMapAddressContent().get(address);
         MediaType mediaType;
         if (oldContent instanceof LicensedAudioVideo) {
             mediaType = MediaType.LicensedAudioVideo;
@@ -301,9 +211,9 @@ public class BusinessLogic implements Observable, Serializable {
             throw new IllegalArgumentException("Illegal media type!");
         }
         Uploader tempUploader = ((Uploadable) oldContent).getUploader();
-        this.storageContent.getListContent().remove(oldContent);
-        this.storageContent.getMapMediaTypeContent().get(mediaType).remove(oldContent);
-        this.storageContent.getMapAddressContent().remove(address, oldContent);
+        this.storage.getListContent().remove(oldContent);
+        this.storage.getMapMediaTypeContent().get(mediaType).remove(oldContent);
+        this.storage.getMapAddressContent().remove(address, oldContent);
 
         if (this.getUploadersWithContentAmount().get(tempUploader) == 0) {
             this.deleteUploader(tempUploader.getName());
@@ -313,12 +223,12 @@ public class BusinessLogic implements Observable, Serializable {
     }
 
     public List<Tag> showAvailableTags() {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
         List<Tag> listAvailableTags = new ArrayList<>();
 
-        for (Content k1 : storageContent.getListContent()) {
+        for (Content k1 : storage.getListContent()) {
             if (k1.getTags() != null) {
                 for (Tag k2 : k1.getTags()) {
                     if (!listAvailableTags.contains(k2)) {
@@ -332,13 +242,13 @@ public class BusinessLogic implements Observable, Serializable {
     }
 
     public List<Tag> showNotAvailableTags() {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
         List<Tag> listNotAvailableTags = new ArrayList<>();
         listNotAvailableTags.addAll(EnumSet.allOf(Tag.class));
 
-        for (Content k1 : storageContent.getListContent()) {
+        for (Content k1 : storage.getListContent()) {
             if (k1.getTags() != null) {
                 for (Tag k2 : k1.getTags()) {
                     listNotAvailableTags.remove(k2);
@@ -405,16 +315,6 @@ public class BusinessLogic implements Observable, Serializable {
         return false;
     }
 
-    public boolean availableUploader(String name) {
-        for (Uploader tmpUploader : listUploader) {
-            if (tmpUploader.getName().equals(name)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public boolean observeAreTagsUpdated() {
         return false;
     }
@@ -444,7 +344,7 @@ public class BusinessLogic implements Observable, Serializable {
 
     public boolean saveStorage(String address) {
         try {
-            this.persistence.save(address, this.storageContent);
+            this.persistence.save(address, this.storage);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -454,7 +354,7 @@ public class BusinessLogic implements Observable, Serializable {
     public boolean loadStorage(String address) {
         try {
             if (this.persistence.load(address) instanceof Storage) {
-                this.storageContent = (StorageContent) this.persistence.load(address);
+                this.storage = (StorageContent) this.persistence.load(address);
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -497,14 +397,14 @@ public class BusinessLogic implements Observable, Serializable {
     }
 
     public BigDecimal getStorageTotalSize() {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new IllegalArgumentException("The storage isn't existent.");
         }
-        return storageContent.getCapacity();
+        return storage.getCapacity();
     }
 
     public BigDecimal getStorageActuallySize() {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new IllegalArgumentException("The storage isn't existent.");
         }
 
@@ -517,7 +417,7 @@ public class BusinessLogic implements Observable, Serializable {
     }
 
     public BigDecimal getStorageActuallySizeInPercent() {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new IllegalArgumentException("The storage isn't existent.");
         }
         return (this.getStorageActuallySize().multiply(new BigDecimal("100"))).divide(this.getStorageTotalSize(), 2, BigDecimal.ROUND_DOWN);
@@ -526,34 +426,34 @@ public class BusinessLogic implements Observable, Serializable {
     public List<Content> getFileByType(MediaType type) {
 
         this.notifyObserver();
-        return storageContent.getMapMediaTypeContent().get(type);
+        return storage.getMapMediaTypeContent().get(type);
     }
 
     public List<Content> getFiles() throws NullPointerException {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
 
         this.notifyObserver();
-        return storageContent.getListContent();
+        return storage.getListContent();
     }
 
     public List<Content> getFilesByType(String type) {
         this.notifyObserver();
-        return storageContent.getMapMediaTypeContent().get(MediaType.valueOf(type));
+        return storage.getMapMediaTypeContent().get(MediaType.valueOf(type));
     }
 
     public StorageContent getStorage() {
-        return storageContent;
+        return storage;
     }
 
     public Content getFile(int index) {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
 
         this.notifyObserver();
-        return storageContent.getListContent().get(index);
+        return storage.getListContent().get(index);
     }
 
     public Content getContent(String address) {
@@ -561,11 +461,11 @@ public class BusinessLogic implements Observable, Serializable {
             throw new NullPointerException("No input!");
         }
 
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
 
-        for (Content k : this.storageContent.getListContent()) {
+        for (Content k : this.storage.getListContent()) {
             if (k.getAddress().equals(address)) {
                 this.notifyObserver();
                 return k;
@@ -575,12 +475,12 @@ public class BusinessLogic implements Observable, Serializable {
     }
 
     public List<Content> getFileByTag(Tag tag) {
-        if (storageContent == null) {
+        if (storage == null) {
             throw new NullPointerException("Storage isn't available.");
         }
         List<Content> listContent = new ArrayList<>();
 
-        for (Content k : storageContent.getListContent()) {
+        for (Content k : storage.getListContent()) {
             for (Tag l : k.getTags()) {
                 if (l.equals(tag)) {
                     listContent.add(k);
@@ -616,7 +516,7 @@ public class BusinessLogic implements Observable, Serializable {
     }
 
     private boolean upload(Content content) {
-        storageContent.getListContent().add(content);
+        storage.getListContent().add(content);
         return true;
     }
 

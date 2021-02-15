@@ -116,7 +116,7 @@ public class LicensedAudioVideoImpl implements LicensedAudioVideo {
                 ", \n\tencording='" + encording + '\'' +
                 ", \n\tholder='" + holder + '\'' +
                 ", \n\tbitrate=" + bitrate +
-                ", \n\tlength=" + length +
+                ", \n\tlength=" + this.getDurationAsString() +
                 ", \n\tsize=" + size +
                 ", \n\taddress='" + address + '\'' +
                 ", \n\ttags=" + tags +
@@ -124,5 +124,27 @@ public class LicensedAudioVideoImpl implements LicensedAudioVideo {
                 ", \n\tuploader=" + uploader.getName() +
                 ", \n\tuploadDate=" + uploadDate +
                 "\n}\n";
+    }
+
+    private String getDurationAsString() {
+        StringBuilder duration = new StringBuilder();
+
+        if (length.toHours() < 10) {
+            duration.append(0);
+        }
+        duration.append(length.toHours());
+        duration.append(":");
+
+        if ((length.toMinutes() % 24) < 10) {
+            duration.append(0);
+        }
+        duration.append(length.toMinutes());
+        duration.append(":");
+        if ((length.getSeconds() % 60) < 10) {
+            duration.append(0);
+        }
+        duration.append(length.getSeconds() % 60);
+
+        return duration.toString();
     }
 }

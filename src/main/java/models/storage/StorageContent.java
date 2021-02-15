@@ -6,7 +6,6 @@
 
 package models.storage;
 
-import exceptions.SizeReachedException;
 import models.mediaDB.Content;
 import models.mediaDB.MediaContent;
 
@@ -35,28 +34,17 @@ public class StorageContent implements Storage, Serializable {
         this.size = BigDecimal.ZERO;
     }
 
-    public boolean checkCapacityReached() throws SizeReachedException {
-        BigDecimal tmpStorageSize = new BigDecimal(0);
-
-        for (Content k : this.getListContent()) {
-            tmpStorageSize.add(((MediaContent) k).getSize());
-        }
-
-        if (tmpStorageSize.compareTo(this.capacity) >= 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
+    @Override
     public Map<MediaType, List<Content>> getMapMediaTypeContent() {
         return mapMediaTypeContent;
     }
 
+    @Override
     public Map<String, Content> getMapAddressContent() {
         return mapAddressContent;
     }
 
+    @Override
     public List<Content> getListContent() {
         return listContent;
     }
@@ -66,6 +54,7 @@ public class StorageContent implements Storage, Serializable {
         return this.capacity;
     }
 
+    @Override
     public BigDecimal getSize() {
         this.size = BigDecimal.ZERO;
         for (Content k : this.getListContent()) {
@@ -77,14 +66,5 @@ public class StorageContent implements Storage, Serializable {
     @Override
     public long getAccessCount() {
         return accessCount;
-    }
-
-    public boolean checkIsSizeReached(Content content) {
-        int checked = this.getSize().compareTo(this.getSize().add(((MediaContent) content).getSize()));
-        if (checked >= 0) {
-            return false;
-        } else {
-            return true;
-        }
     }
 }

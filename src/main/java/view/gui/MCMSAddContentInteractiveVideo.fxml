@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<AnchorPane prefHeight="480.0" prefWidth="640.0" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.gui.HubControllerAddContentInteractiveVideo">
+    <children>
+        <Pane layoutX="10.0" layoutY="10.0" stylesheets="@Style.css" AnchorPane.bottomAnchor="0.0"
+              AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox prefHeight="470.0" prefWidth="630.0">
+                    <children>
+                        <VBox spacing="5.0" stylesheets="@Style.css" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Uploader:"/>
+                                <TextField fx:id="textFieldUploader" prefHeight="25.0" prefWidth="164.0"/>
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Bitrate:"/>
+                                <Slider fx:id="sliderBitrate" blockIncrement="8000.0" majorTickUnit="32000.0"
+                                        max="256000.0" minorTickCount="800" showTickLabels="true" showTickMarks="true"/>
+                                <Label fx:id="labelGetBitrate" prefHeight="17.0" prefWidth="488.0"/>
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Length:"/>
+                                <HBox prefHeight="32.0" spacing="5.0">
+                                    <children>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Hours:"/>
+                                                <TextField fx:id="textFieldLengthHours" prefHeight="25.0"
+                                                           prefWidth="164.0" text="0"/>
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Minutes:"/>
+                                                <TextField fx:id="textFieldLengthMinutes" prefHeight="25.0"
+                                                           prefWidth="164.0" text="0"/>
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Seconds:"/>
+                                                <TextField fx:id="textFieldLengthSeconds" prefHeight="25.0"
+                                                           prefWidth="164.0" text="0"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Video Encording:"/>
+                                <ChoiceBox fx:id="choiceBoxVideoEncoding" prefWidth="150.0">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <String fx:value="DPCM"/>
+                                            <String fx:value="DPC"/>
+                                            <String fx:value="DWT"/>
+                                        </FXCollections>
+                                    </items>
+                                </ChoiceBox>
+                                <Label prefHeight="7.0" text="Format:"/>
+                                <HBox prefHeight="32.0" spacing="5.0">
+                                    <children>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Width:"/>
+                                                <TextField fx:id="textFieldFormatWidth" prefHeight="25.0"
+                                                           prefWidth="164.0" text="0"/>
+                                            </children>
+                                        </VBox>
+                                        <VBox prefHeight="200.0" prefWidth="100.0">
+                                            <children>
+                                                <Label prefHeight="7.0" prefWidth="164.0" text="Height:"/>
+                                                <TextField fx:id="textFieldFormatHeight" prefHeight="25.0"
+                                                           prefWidth="164.0" text="0"/>
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </HBox>
+                                <Label prefHeight="7.0" text="Samlingrate:"/>
+                                <ChoiceBox fx:id="choiceBoxSamlingrate" prefWidth="150.0">
+                                    <items>
+                                        <FXCollections fx:factory="observableArrayList">
+                                            <Integer fx:value="32000"/>
+                                            <Integer fx:value="44100"/>
+                                            <Integer fx:value="48000"/>
+                                            <Integer fx:value="88200"/>
+                                            <Integer fx:value="96000"/>
+                                            <Integer fx:value="192000"/>
+                                        </FXCollections>
+                                    </items>
+                                </ChoiceBox>
+                                <Label prefHeight="7.0" prefWidth="164.0" text="Interaction type:"/>
+                                <TextField fx:id="textFieldInteractionType" prefHeight="25.0" prefWidth="164.0"/>
+                            </children>
+                            <padding>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                            </padding>
+                            <HBox.margin>
+                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                            </HBox.margin>
+                        </VBox>
+                        <VBox HBox.hgrow="ALWAYS">
+                            <children>
+                                <VBox fx:id="vBoxTags" prefHeight="132.0" prefWidth="91.0" spacing="5.0"
+                                      VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Label prefHeight="7.0" prefWidth="164.0" text="Tags:"/>
+                                        <CheckBox fx:id="checkBoxTagAnimal" mnemonicParsing="false" text="Animal"/>
+                                        <CheckBox fx:id="checkBoxTagTutorial" mnemonicParsing="false" text="Tutorial"/>
+                                        <CheckBox fx:id="checkBoxTagLifestyle" mnemonicParsing="false"
+                                                  text="Lifestyle"/>
+                                        <CheckBox fx:id="checkBoxTagNews" mnemonicParsing="false" text="News"/>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                </VBox>
+                                <VBox alignment="BOTTOM_LEFT" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <RadioButton fx:id="radioButtonTestmode" mnemonicParsing="false"
+                                                     onAction="#clickRadioButtonTestmode" text="Testmode"/>
+                                        <HBox alignment="BOTTOM_RIGHT" spacing="5.0">
+                                            <children>
+                                                <Button fx:id="buttonCancel" mnemonicParsing="false"
+                                                        onAction="#clickButtonCancel" text="Cancel"/>
+                                                <Button fx:id="buttonAdd" mnemonicParsing="false"
+                                                        onAction="#clickButtonAdd" text="Add"/>
+                                            </children>
+                                            <padding>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                            </padding>
+                                            <VBox.margin>
+                                                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                            </VBox.margin>
+                                        </HBox>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets/>
+                                    </VBox.margin>
+                                </VBox>
+                            </children>
+                            <HBox.margin>
+                                <Insets/>
+                            </HBox.margin>
+                        </VBox>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Pane>
+    </children>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+    </padding>
+</AnchorPane>
