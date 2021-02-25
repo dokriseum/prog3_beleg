@@ -1,4 +1,4 @@
-import logic.network.media.MediaServer;
+import logic.network.MediaServer;
 
 import java.io.IOException;
 import java.net.ServerSocket;

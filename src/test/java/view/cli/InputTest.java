@@ -41,7 +41,7 @@ class InputTest {
         testBusinessLogic1 = new BusinessLogic(testStorageContent1);
         Observer o1 = new CheckSizePerCentObserver(testBusinessLogic1);
         Observer o2 = new CheckTagsObserver(testBusinessLogic1);
-        testInput1 = new Input("");
+        testInput1 = new Input(null, null);
         testHandler1 = new InputEventHandler();
         testInputEventListenerAddMedia = new InputEventListenerAddContent(testBusinessLogic1);
         testInputEventListenerAddUploader = new InputEventListenerAddUploader(testBusinessLogic1);

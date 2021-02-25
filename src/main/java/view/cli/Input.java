@@ -8,6 +8,7 @@ package view.cli;
 
 import exceptions.NotImplementsException;
 import logic.event.*;
+import logic.utils.OutputSaver;
 import models.mediaDB.Tag;
 import models.mediaDB.UploaderImpl;
 import models.storage.MediaType;
@@ -33,6 +34,7 @@ public class Input {
     private InputEvent inputEvent;
     private DataInputStream streamInputData;
     private DataOutputStream streamOutputData;
+    private StringBuffer output;
 
     public Choice getInputChoice() {
         return inputChoice;
@@ -43,15 +45,24 @@ public class Input {
     }
 
     public Input() {
-    }
-
-    public Input(String testString) {
-        this.testString = testString;
+        this.testString = "";
+        stringReader = new StringReader(testString);
+        br = new BufferedReader(stringReader);
+        sw = new StringWriter();
+        bw = new BufferedWriter(sw);
     }
 
     public Input(InputStream streamInput, OutputStream streamOutput) {
-        this.streamInputData = new DataInputStream(streamInput);
-        this.streamOutputData = new DataOutputStream(streamOutput);
+        if ((streamInput == null) && (streamOutput == null)) {
+            this.testString = "";
+            stringReader = new StringReader(testString);
+            br = new BufferedReader(stringReader);
+            sw = new StringWriter();
+            bw = new BufferedWriter(sw);
+        } else {
+            this.streamInputData = new DataInputStream(streamInput);
+            this.streamOutputData = new DataOutputStream(streamOutput);
+        }
     }
 
     public boolean setTestString(String testString) {
@@ -67,66 +78,85 @@ public class Input {
         this.handler = handler;
     }
 
-
-    public boolean ioServer() {
-        try {
-            while (!exitCondition) {
-                String output = this.outputText();
-                this.streamOutputData.writeUTF(output);
-                System.out.println("\nInputOutput -> output");
-
-                inputString = streamInputData.readUTF();
-
-                System.out.println("\t" + inputString);
-                if (inputString == null)
-                    break;
-                inputEvent = null;
-                try {
-                    inputEvent = inputMapping(inputString);
-                    if (this.handler != null) {
-                        handler.handle(inputEvent);
-                    }
-                    if (testString == null) {
-                        if ((inputEvent instanceof InputEventShowContent) ||
-                                (inputEvent instanceof InputEventShowUploader) ||
-                                (inputEvent instanceof InputEventAddContent) ||
-                                (inputEvent instanceof InputEventAddUploader) ||
-                                (inputEvent instanceof InputEventDeleteMedia) ||
-                                (inputEvent instanceof InputEventDeleteUploader)) {
-                            //this.waitingContinue();
-                        }
-                    }
-                } catch (IllegalArgumentException e) {
-                    System.err.println(e.getMessage());
-                } catch (NotImplementsException e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println("InputOutput -> input");
-        return true;
-    }
+//
+//    public boolean ioServer() {
+//        try {
+//            while (!exitCondition) {
+//                System.out.println("Anfang IO " + this.inputChoice);
+//                output = this.outputText();
+//                System.out.println(output);
+//
+//                this.streamOutputData.writeUTF(output);
+//                System.out.println("\nInputOutput -> output");
+//
+//                inputString = streamInputData.readUTF();
+//
+//                System.out.println("\t" + inputString);
+//                if (inputString == null)
+//                    break;
+//                inputEvent = null;
+//                try {
+//                    inputEvent = inputMapping(inputString);
+//                    if (this.handler != null) {
+//                        handler.handle(inputEvent);
+//                    }
+//                    if (testString == null) {
+//                        if ((inputEvent instanceof InputEventShowContent) ||
+//                                (inputEvent instanceof InputEventShowUploader) ||
+//                                (inputEvent instanceof InputEventAddContent) ||
+//                                (inputEvent instanceof InputEventAddUploader) ||
+//                                (inputEvent instanceof InputEventDeleteMedia) ||
+//                                (inputEvent instanceof InputEventDeleteUploader)) {
+//                            //this.waitingContinue();
+//                        }
+//                    }
+//                } catch (IllegalArgumentException e) {
+//                    System.err.println(e.getMessage());
+//                } catch (NotImplementsException e) {
+//                    System.err.println(e.getMessage());
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("InputOutput -> input");
+//        return true;
+//    }
 
     public void input() {
         try {
-            if (testString == null) {
-                isr = new InputStreamReader(System.in);
-                br = new BufferedReader(isr);
-                osw = new OutputStreamWriter(System.out);
-                bw = new BufferedWriter(osw);
-            } else {
-                stringReader = new StringReader(testString);
-                br = new BufferedReader(stringReader);
-                sw = new StringWriter();
-                bw = new BufferedWriter(sw);
-            }
+//            if (testString == null) {
+//                isr = new InputStreamReader(System.in);
+//                br = new BufferedReader(isr);
+//                osw = new OutputStreamWriter(System.out);
+//                bw = new BufferedWriter(osw);
+//            } else {
+//                stringReader = new StringReader(testString);
+//                br = new BufferedReader(stringReader);
+//                sw = new StringWriter();
+//                bw = new BufferedWriter(sw);
+//            }
             while (!exitCondition) {
-                bw.write(this.outputText());//System.out.println(this.outputText());
-                bw.flush();
-                inputString = br.readLine();
+                output = new StringBuffer();
+                if ((this.streamInputData == null) && (this.streamOutputData == null)) {
+                    bw.write(this.outputText());//System.out.println(this.outputText());
+                    bw.flush();
+                    inputString = br.readLine();
+                } else {
+                    if (OutputSaver.isIsShowEvent()) {
+                        this.output.append(OutputSaver.getOutput());
+                        OutputSaver.setIsShowEvent(false);
+                    }
+                    //System.out.println("Anfang IO " + this.inputChoice);
+                    output.append(this.outputText());
+                    //System.out.println(output);
+                    this.streamOutputData.writeUTF(output.toString());
+                    //TODO: entfernen
+                    System.out.println("\nInputOutput -> output");
+
+                    inputString = streamInputData.readUTF();
+                }
 
                 if (inputString == null)
                     break;
@@ -158,39 +188,39 @@ public class Input {
         }
     }
 
-    public void input(InputStream streamInput, OutputStream streamOutput) {
-        try {
-            this.isr = new InputStreamReader(streamInput);
-            this.br = new BufferedReader(this.isr);
-            this.osw = new OutputStreamWriter(streamOutput);
-            this.bw = new BufferedWriter(this.osw);
-            while (!exitCondition) {
-                bw.write(this.outputText());//System.out.println(this.outputText());
-                //bw.flush();
-                System.out.println("BR 1: " + br.readLine());
-                inputString = br.readLine();
-
-                if (inputString == null)
-                    break;
-                inputEvent = null;
-                try {
-                    inputEvent = inputMapping(inputString);
-                    if (this.handler != null) {
-                        handler.handle(inputEvent);
-                    }
-                } catch (IllegalArgumentException e) {
-                    bw.write(e.getMessage());
-                    bw.flush();
-                } catch (NotImplementsException e) {
-                    bw.write(e.getMessage());
-                    bw.flush();
-                }
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    //    public void input(InputStream streamInput, OutputStream streamOutput) {
+//        try {
+//            this.isr = new InputStreamReader(streamInput);
+//            this.br = new BufferedReader(this.isr);
+//            this.osw = new OutputStreamWriter(streamOutput);
+//            this.bw = new BufferedWriter(this.osw);
+//            while (!exitCondition) {
+//                bw.write(this.outputText());//System.out.println(this.outputText());
+//                //bw.flush();
+//                System.out.println("BR 1: " + br.readLine());
+//                inputString = br.readLine();
+//
+//                if (inputString == null)
+//                    break;
+//                inputEvent = null;
+//                try {
+//                    inputEvent = inputMapping(inputString);
+//                    if (this.handler != null) {
+//                        handler.handle(inputEvent);
+//                    }
+//                } catch (IllegalArgumentException e) {
+//                    bw.write(e.getMessage());
+//                    bw.flush();
+//                } catch (NotImplementsException e) {
+//                    bw.write(e.getMessage());
+//                    bw.flush();
+//                }
+//            }
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public InputEvent inputMapping(String inputString) throws IllegalArgumentException, NotImplementsException {
 
@@ -199,6 +229,7 @@ public class Input {
             return new InputEventExit(this, "InputEventExit");
         }
 
+        //System.out.println("Hallo\n" + this.inputChoice + "\t" + inputString);
         String[] inputStringSplitted = inputString.trim().split(" ");
         if (inputStringSplitted[0].startsWith(":")) {
             switch (inputStringSplitted[0].trim()) {
@@ -364,7 +395,8 @@ public class Input {
                 }
                 break;
             case EDIT:
-                throw new NotImplementsException("EDIT MODE is yet not implements");
+                return new InputEventUpdateContent(this, "InputEventUpdateContent", inputStringSplitted[0]);
+            //throw new NotImplementsException("EDIT MODE is yet not implements");
             case CONFIG:
                 throw new NotImplementsException("CONFIG MODE is yet not implements");
             case PERSISTENCE:
@@ -406,6 +438,11 @@ public class Input {
                 "tag [included (i) | excluded (e)]\n\tdisplay of existing or non-existing tags\n";
     }
 
+    private String outputTextForEdit() {
+        return "###################################\n############# E D I T #############\n###################################\n\n" +
+                "[polling address]\n\tincreases the polling counter by one\n";
+    }
+
     private String outputTextForRequestInput() {
         return "\nEnter input: ";
     }
@@ -420,6 +457,9 @@ public class Input {
                 outputText += this.outputTextForDelete();
             }
             if (this.inputChoice.equals(Choice.SHOW)) {
+                outputText += this.outputTextForShow();
+            }
+            if (this.inputChoice.equals(Choice.EDIT)) {
                 outputText += this.outputTextForShow();
             }
         }

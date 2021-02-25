@@ -17,25 +17,14 @@ public class Client {
         try (Socket socket = new Socket("localhost", 3004); DataInputStream in = new DataInputStream(socket.getInputStream()); DataOutputStream out = new DataOutputStream(socket.getOutputStream())) {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-            do {
-                output = in.readUTF();
-                System.out.println(output);
-                if ((input.startsWith("content"))
-                        || (input.startsWith("uploader"))
-                        || (input.startsWith("tag"))
-                ) {
-                    if (input.equals("tag")) {
-                        System.out.println(in.readUTF());
-                    }
-                    System.out.println(in.readUTF());
-                }
+            boolean isNotFinished = true;
+            String outputString, inputString = "";
+            while (true) {
 
-                input = br.readLine();
-
-                out.writeUTF(input);
+                System.out.println(in.readUTF());
+                inputString = br.readLine();
+                out.writeUTF(inputString);
             }
-            while (true);
-
         } catch (SocketException e) {
             System.err.println("connection lost");
         } catch (IOException e) {

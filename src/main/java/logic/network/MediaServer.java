@@ -1,4 +1,4 @@
-package logic.network.media;
+package logic.network;
 
 import logic.BusinessLogic;
 import logic.event.InputEventHandler;
@@ -65,7 +65,7 @@ public class MediaServer implements Runnable {
     }
 
     private boolean executeSession(DataInputStream in, DataOutputStream out) throws IOException {
-        io.ioServer();
+        io.input();
 //        char command = in.readChar();
 //        if ('I' != command) return "unknown command: " + command;
 //        int bookId = in.readInt();

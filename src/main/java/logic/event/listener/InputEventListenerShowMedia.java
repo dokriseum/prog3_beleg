@@ -10,10 +10,10 @@ import logic.BusinessLogic;
 import logic.event.InputEvent;
 import logic.event.InputEventListener;
 import logic.event.InputEventShowContent;
+import logic.utils.OutputSaver;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 
 public class InputEventListenerShowMedia implements InputEventListener {
     private BusinessLogic businessLogic;
@@ -34,23 +34,32 @@ public class InputEventListenerShowMedia implements InputEventListener {
     public void onInputEvent(InputEvent event) {
         if (event instanceof InputEventShowContent) {
             if ((dos != null) && (dis != null)) {
-                try {
-                    if ((((InputEventShowContent) event).getEventMediaType() != null) && !(event.getText().equals("InputEventShowMediaTags"))) {
-                        dos.writeUTF(businessLogic.getFileByType(((InputEventShowContent) event).getEventMediaType()).toString());
-                    } else if (event.getText().equals("InputEventShowMediaTags")) {
-                        if (((InputEventShowContent) event).getEventTagShowType() == null || (((InputEventShowContent) event).getEventTagShowType().charValue() == 'i')) {
-                            dos.writeUTF(businessLogic.showAvailableTags().toString());
-                        }
-                        if (((InputEventShowContent) event).getEventTagShowType() == null || (((InputEventShowContent) event).getEventTagShowType().charValue() == 'e')) {
-                            dos.writeUTF(businessLogic.showNotAvailableTags().toString());
-                        }
-                    } else {
-                        dos.writeUTF(businessLogic.getFiles().toString());
+                StringBuffer outputTemp = new StringBuffer();
+                if (
+                        (((InputEventShowContent) event).getEventMediaType() != null)
+                                && !(event.getText().equals("InputEventShowMediaTags"))) {
+
+                    outputTemp.append(businessLogic.getFileByType(((InputEventShowContent) event).getEventMediaType()).toString());
+
+                } else if (event.getText().equals("InputEventShowMediaTags")) {
+                    if (((InputEventShowContent) event).getEventTagShowType() == null || (((InputEventShowContent) event).getEventTagShowType().charValue() == 'i')) {
+                        outputTemp.append(businessLogic.showAvailableTags().toString());
                     }
-                    dos.flush();
-                } catch (IOException e) {
-                    System.err.println(e.getStackTrace());
+                    if (((InputEventShowContent) event).getEventTagShowType() == null || (((InputEventShowContent) event).getEventTagShowType().charValue() == 'e')) {
+                        outputTemp.append(businessLogic.showNotAvailableTags().toString());
+                    }
+                } else {
+                    outputTemp.append(businessLogic.getFiles().toString());
                 }
+//                    outputTemp.append(((Input) event.getSource()).outputTextForShow());
+//                    outputTemp.append("\n");
+//                    outputTemp.append(((Input) event.getSource()).outputTextForRequestInput());
+                //outputTemp += (((Input) event.getSource()).outputTextForShow() + "\n" + ((Input) event.getSource()).outputTextForRequestInput());
+                //dos.writeUTF(outputTemp.toString());
+                //dos.writeUTF(((Input) event.getSource()).outputTextForShow() + ((Input) event.getSource()).outputTextForRequestInput());
+                //dos.flush();
+                OutputSaver.setOutput(outputTemp.toString());
+                OutputSaver.setIsShowEvent(true);
             } else {
                 if ((((InputEventShowContent) event).getEventMediaType() != null) && !(event.getText().equals("InputEventShowMediaTags"))) {
                     System.out.println(businessLogic.getFileByType(((InputEventShowContent) event).getEventMediaType()));
