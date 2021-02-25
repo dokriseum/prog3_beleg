@@ -70,9 +70,7 @@ public class DummyContentAdder {
                     randomBitrate,
                     randomLength,
                     randomTags,
-                    randomAccessCount,
                     randomUploader,
-                    (new Date()),
                     randomType);
             this.outputText = "ADD: " + businessLogic.getStorage().getListContent().get(businessLogic.getStorage().getListContent().size() - 1).toString();
 

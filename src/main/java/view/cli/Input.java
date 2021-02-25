@@ -289,7 +289,7 @@ public class Input {
                         default:
                             throw new IllegalArgumentException("illegal type: " + inputStringSplitted[0]);
                     }
-                    /**
+                    /*
                      * add the tags
                      */
                     if (!inputStringSplitted[2].equals(",")) {
@@ -299,7 +299,7 @@ public class Input {
                         }
                     }
 
-                    /**
+                    /*
                      * Object source,
                      *                           String text,
                      *                           MediaType eventMediaType,      L1      I1
@@ -349,6 +349,81 @@ public class Input {
                                 new UploaderImpl(inputStringSplitted[1]),
                                 new Date(),
                                 inputStringSplitted[8]
+                        );
+                    } else if (tempMediaType == MediaType.LicensedVideo) {
+                        return new InputEventAddContent(this, "InputEventAddMedia",
+                                tempMediaType,
+                                -1,
+                                Integer.parseInt(inputStringSplitted[7]),
+                                Integer.parseInt(inputStringSplitted[6]),
+                                inputStringSplitted[5],
+                                inputStringSplitted[8],
+                                Long.parseLong(inputStringSplitted[3]),
+                                Duration.ofSeconds(Long.parseLong(inputStringSplitted[4])),
+                                tags,
+                                new UploaderImpl(inputStringSplitted[1]),
+                                new Date(),
+                                null
+                        );
+                    } else if (tempMediaType == MediaType.LicensedAudio) {
+                        return new InputEventAddContent(this, "InputEventAddMedia",
+                                tempMediaType,
+                                Integer.parseInt(inputStringSplitted[6]),
+                                -1,
+                                -1,
+                                inputStringSplitted[5],
+                                inputStringSplitted[8],
+                                Long.parseLong(inputStringSplitted[3]),
+                                Duration.ofSeconds(Long.parseLong(inputStringSplitted[4])),
+                                tags,
+                                new UploaderImpl(inputStringSplitted[1]),
+                                new Date(),
+                                null
+                        );
+                    } else if (tempMediaType == MediaType.AudioVideo) {
+                        return new InputEventAddContent(this, "InputEventAddMedia",
+                                tempMediaType,
+                                Integer.parseInt(inputStringSplitted[8]),
+                                Integer.parseInt(inputStringSplitted[7]),
+                                Integer.parseInt(inputStringSplitted[6]),
+                                inputStringSplitted[5],
+                                null,
+                                Long.parseLong(inputStringSplitted[3]),
+                                Duration.ofSeconds(Long.parseLong(inputStringSplitted[4])),
+                                tags,
+                                new UploaderImpl(inputStringSplitted[1]),
+                                new Date(),
+                                null
+                        );
+                    } else if (tempMediaType == MediaType.Video) {
+                        return new InputEventAddContent(this, "InputEventAddMedia",
+                                tempMediaType,
+                                -1,
+                                Integer.parseInt(inputStringSplitted[7]),
+                                Integer.parseInt(inputStringSplitted[6]),
+                                inputStringSplitted[5],
+                                null,
+                                Long.parseLong(inputStringSplitted[3]),
+                                Duration.ofSeconds(Long.parseLong(inputStringSplitted[4])),
+                                tags,
+                                new UploaderImpl(inputStringSplitted[1]),
+                                new Date(),
+                                null
+                        );
+                    } else if (tempMediaType == MediaType.Audio) {
+                        return new InputEventAddContent(this, "InputEventAddMedia",
+                                tempMediaType,
+                                Integer.parseInt(inputStringSplitted[6]),
+                                -1,
+                                -1,
+                                inputStringSplitted[5],
+                                null,
+                                Long.parseLong(inputStringSplitted[3]),
+                                Duration.ofSeconds(Long.parseLong(inputStringSplitted[4])),
+                                tags,
+                                new UploaderImpl(inputStringSplitted[1]),
+                                new Date(),
+                                null
                         );
                     } else {
                         throw new IllegalArgumentException("false media type");

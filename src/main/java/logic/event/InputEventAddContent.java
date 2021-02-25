@@ -55,7 +55,7 @@ public class InputEventAddContent extends InputEvent {
         return eventHeight;
     }
 
-    public String getEventEncording() {
+    public String getEventEncoding() {
         return eventEncording;
     }
 

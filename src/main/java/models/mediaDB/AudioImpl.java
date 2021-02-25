@@ -13,27 +13,27 @@ import java.util.Date;
 
 public class AudioImpl implements Audio {
     private int samplingRate;
-    private String encording;
+    private String encoding;
     private long bitrate;
     private Duration length;
     private BigDecimal size;
     private String address;
     private Collection<Tag> tags;
-    private long accessCount = 0;
+    private long accessCount;
     private Uploader uploader;
     private Date uploadDate;
 
-    public AudioImpl(int samplingRate, String encording, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, long accessCount, Uploader uploader, Date uploadDate) {
+    public AudioImpl(int samplingRate, String encoding, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, Uploader uploader) {
         this.samplingRate = samplingRate;
-        this.encording = encording;
+        this.encoding = encoding;
         this.bitrate = bitrate;
         this.length = length;
         this.size = size;
         this.address = address;
         this.tags = tags;
-        this.accessCount = accessCount;
+        this.accessCount = 0;
         this.uploader = uploader;
-        this.uploadDate = uploadDate;
+        this.uploadDate = new Date();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AudioImpl implements Audio {
 
     @Override
     public String getEncoding() {
-        return encording;
+        return encoding;
     }
 
     @Override
@@ -90,7 +90,7 @@ public class AudioImpl implements Audio {
     public String toString() {
         return "AudioImpl{" +
                 "samplingRate=" + samplingRate +
-                ", encording='" + encording + '\'' +
+                ", encording='" + encoding + '\'' +
                 ", bitrate=" + bitrate +
                 ", length=" + this.getDurationAsString() +
                 ", size=" + size +

@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.util.Date;
 
 import static org.mockito.Mockito.*;
 
@@ -29,8 +28,7 @@ class BusinessLogicTest {
         mockBusinessLogic.addObserver(observer);
         try {
             mockBusinessLogic.uploadContent(
-                    MediaType.LicensedAudioVideo, 1, 1, 1, "ABC", "CBS", 2, Duration.ofSeconds(231),
-                    null, 2, (new UploaderImpl("UPU")), (new Date()), "Abstimmung");
+                    MediaType.LicensedAudioVideo, 1, 1, 1, "ABC", "CBS", 2, Duration.ofSeconds(231), null, (new UploaderImpl("UPU")), "Abstimmung");
         } catch (SizeReachedException e) {
             e.printStackTrace();
         }
@@ -47,8 +45,7 @@ class BusinessLogicTest {
         mockBusinessLogic.removeObserver(observer);
         try {
             mockBusinessLogic.uploadContent(
-                    MediaType.LicensedAudioVideo, 1, 1, 1, "ABC", "CBS", 2, Duration.ofSeconds(231),
-                    null, 2, (new UploaderImpl("UPU")), (new Date()), "Abstimmung");
+                    MediaType.LicensedAudioVideo, 1, 1, 1, "ABC", "CBS", 2, Duration.ofSeconds(231), null, (new UploaderImpl("UPU")), "Abstimmung");
         } catch (SizeReachedException e) {
             e.printStackTrace();
         }

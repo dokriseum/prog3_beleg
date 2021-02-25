@@ -15,29 +15,29 @@ public class AudioVideoImpl implements AudioVideo {
     private int samplingRate;
     private int width;
     private int height;
-    private String encording;
+    private String encoding;
     private long bitrate;
     private Duration length;
     private BigDecimal size;
     private String address;
     private Collection<Tag> tags;
-    private long accessCount = 0;
+    private long accessCount;
     private Uploader uploader;
     private Date uploadDate;
 
-    public AudioVideoImpl(int samplingRate, int width, int height, String encording, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, Uploader uploader, Date uploadDate) {
+    public AudioVideoImpl(int samplingRate, int width, int height, String encoding, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, Uploader uploader) {
         this.samplingRate = samplingRate;
         this.width = width;
         this.height = height;
-        this.encording = encording;
+        this.encoding = encoding;
         this.bitrate = bitrate;
         this.length = length;
         this.size = size;
         this.address = address;
         this.tags = tags;
+        this.accessCount = 0;
         this.uploader = uploader;
-        this.uploadDate = uploadDate;
-        accessCount++;
+        this.uploadDate = new Date();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class AudioVideoImpl implements AudioVideo {
 
     @Override
     public String getEncoding() {
-        return encording;
+        return encoding;
     }
 
     @Override
@@ -106,7 +106,7 @@ public class AudioVideoImpl implements AudioVideo {
                 "samplingRate=" + samplingRate +
                 ", width=" + width +
                 ", height=" + height +
-                ", encording='" + encording + '\'' +
+                ", encording='" + encoding + '\'' +
                 ", bitrate=" + bitrate +
                 ", length=" + length +
                 ", size=" + size +

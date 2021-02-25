@@ -20,12 +20,12 @@ public class InteractiveVideoImpl implements InteractiveVideo {
     private BigDecimal size;
     private String address;
     private Collection<Tag> tags;
-    private long accessCount = 0;
+    private long accessCount;
     private Uploader uploader;
     private Date uploadDate;
     private String type;
 
-    public InteractiveVideoImpl(int width, int height, String encording, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, long accessCount, Uploader uploader, Date uploadDate, String type) {
+    public InteractiveVideoImpl(int width, int height, String encording, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, Uploader uploader, String type) {
         this.width = width;
         this.height = height;
         this.encording = encording;
@@ -34,20 +34,20 @@ public class InteractiveVideoImpl implements InteractiveVideo {
         this.size = size;
         this.address = address;
         this.tags = tags;
-        this.accessCount = accessCount;
+        this.accessCount = 0;
         this.uploader = uploader;
-        this.uploadDate = uploadDate;
+        this.uploadDate = new Date();
         this.type = type;
     }
 
     @Override
     public int getWidth() {
-        return 0;
+        return this.width;
     }
 
     @Override
     public int getHeight() {
-        return 0;
+        return this.height;
     }
 
     @Override

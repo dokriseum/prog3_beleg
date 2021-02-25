@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import logic.BusinessLogic;
 import models.mediaDB.Tag;
+import models.mediaDB.UploaderImpl;
 import models.storage.MediaType;
 
 import java.time.Duration;
@@ -100,9 +101,7 @@ public class HubControllerAddContentLicensedAudioVideo {
                     readValueBitrate,
                     readValueLength,
                     readValueTags,
-                    0,
-                    readValueUploader,
-                    thisDate,
+                    new UploaderImpl(readValueUploader),
                     null);
 
             outputTextField.append("An licensed audio video was added.");

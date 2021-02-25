@@ -30,7 +30,7 @@ public class InputEventListenerAddContent implements InputEventListener {
         if (event instanceof InputEventAddContent) {
             InputEventAddContent tempInputEventAddContent = (InputEventAddContent) event;
             try {
-                businessLogic.uploadContent(tempInputEventAddContent.getEventMediaType(), tempInputEventAddContent.getEventSamplingRate(), tempInputEventAddContent.getEventWidth(), tempInputEventAddContent.getEventHeight(), tempInputEventAddContent.getEventEncording(), tempInputEventAddContent.getEventHolder(), tempInputEventAddContent.getEventBitrate(), tempInputEventAddContent.getEventLength(), tempInputEventAddContent.getEventTags(), tempInputEventAddContent.getEventAccessCount(), tempInputEventAddContent.getEventUploader(), tempInputEventAddContent.getEventUploadDate(), tempInputEventAddContent.getEventType());
+                businessLogic.uploadContent(tempInputEventAddContent.getEventMediaType(), tempInputEventAddContent.getEventSamplingRate(), tempInputEventAddContent.getEventWidth(), tempInputEventAddContent.getEventHeight(), tempInputEventAddContent.getEventEncoding(), tempInputEventAddContent.getEventHolder(), tempInputEventAddContent.getEventBitrate(), tempInputEventAddContent.getEventLength(), tempInputEventAddContent.getEventTags(), tempInputEventAddContent.getEventUploader(), tempInputEventAddContent.getEventType());
             } catch (SizeReachedException e) {
                 System.err.println(e.getMessage());
             } catch (Exception e) {

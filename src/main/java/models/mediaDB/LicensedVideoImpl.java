@@ -6,34 +6,32 @@ import java.util.Collection;
 import java.util.Date;
 
 public class LicensedVideoImpl implements LicensedVideo {
-    private int samplingRate;
     private int width;
     private int height;
-    private String encording;
+    private String encoding;
     private String holder;
     private long bitrate;
     private Duration length;
     private BigDecimal size;
     private String address;
     private Collection<Tag> tags;
-    private long accessCount = 0;
+    private long accessCount;
     private Uploader uploader;
     private Date uploadDate;
 
-    public LicensedVideoImpl(int samplingRate, int width, int height, String encording, String holder, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, long accessCount, Uploader uploader, Date uploadDate) {
-        this.samplingRate = samplingRate;
+    public LicensedVideoImpl(int width, int height, String encoding, String holder, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, Uploader uploader) {
         this.width = width;
         this.height = height;
-        this.encording = encording;
+        this.encoding = encoding;
         this.holder = holder;
         this.bitrate = bitrate;
         this.length = length;
         this.size = size;
         this.address = address;
         this.tags = tags;
-        this.accessCount = accessCount;
+        this.accessCount = 0;
         this.uploader = uploader;
-        this.uploadDate = uploadDate;
+        this.uploadDate = new Date();
     }
 
     @Override
@@ -48,7 +46,7 @@ public class LicensedVideoImpl implements LicensedVideo {
 
     @Override
     public String getEncoding() {
-        return encording;
+        return encoding;
     }
 
     @Override
@@ -99,10 +97,9 @@ public class LicensedVideoImpl implements LicensedVideo {
     @Override
     public String toString() {
         return "LicensedAudioVideo{" +
-                "\n\tsamplingRate=" + samplingRate +
                 ", \n\twidth=" + width +
                 ", \n\theight=" + height +
-                ", \n\tencording='" + encording + '\'' +
+                ", \n\tencording='" + encoding + '\'' +
                 ", \n\tholder='" + holder + '\'' +
                 ", \n\tbitrate=" + bitrate +
                 ", \n\tlength=" + this.getDurationAsString() +

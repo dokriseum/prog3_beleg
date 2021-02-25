@@ -5,11 +5,10 @@ import models.mediaDB.VideoImpl;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.util.Date;
 
 public class Testing {
     public static void main(String[] args) {
-        Content c = new VideoImpl(1920, 1080, "ETW", 48000, Duration.ofSeconds(68), BigDecimal.ZERO, "alpha", null, 0, new UploaderImpl("Citrus"), new Date());
+        Content c = new VideoImpl(1920, 1080, "ETW", 48000, Duration.ofSeconds(68), BigDecimal.ZERO, "alpha", null, new UploaderImpl("Citrus"));
         System.out.println(c.toString());
         try {
             Field member_name = c.getClass().getDeclaredField("accessCount");

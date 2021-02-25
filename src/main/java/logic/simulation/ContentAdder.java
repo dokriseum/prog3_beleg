@@ -77,9 +77,7 @@ public class ContentAdder implements Runnable {
                     randomBitrate,
                     randomLength,
                     randomTags,
-                    randomAccessCount,
                     randomUploader,
-                    (new Date()),
                     randomType);
             System.out.println("ADD: " + businessLogic.getStorage().getListContent().get(businessLogic.getStorage().getListContent().size() - 1).toString());
 

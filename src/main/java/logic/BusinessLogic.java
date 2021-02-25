@@ -66,19 +66,54 @@ public class BusinessLogic implements Observable, Serializable {
      * old
      */
 
-    public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encording, String holder, long bitrate, Duration length, Collection<Tag> tags, long accessCount, Uploader uploader, Date uploadDate, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
+    public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, Uploader uploader, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
         Content content;
 
         String address = this.generateAddress(mediaType, uploader.getName(), width, height);
         BigDecimal size = this.generateSize(samplingRate, bitrate, width, height);
 
-        if (mediaType.equals(MediaType.InteractiveVideo)) {
-            content = new InteractiveVideoImpl(width, height, encording, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate, type);
-        } else if (mediaType.equals(MediaType.LicensedAudioVideo)) {
-            content = new LicensedAudioVideoImpl(samplingRate, width, height, encording, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
-        } else {
-            throw new IllegalArgumentException("MediaType was not found");
+        switch (mediaType) {
+            case InteractiveVideo:
+                content = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, this.addUploaderForContent(uploader.getName()), type);
+                break;
+            case LicensedAudioVideo:
+                content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, this.addUploaderForContent(uploader.getName()));
+                break;
+            case LicensedVideo:
+                content = new LicensedVideoImpl(width, height, encoding, holder, bitrate, length, size, address, tags, this.addUploaderForContent(uploader.getName()));
+                break;
+            case LicensedAudio:
+                content = new LicensedAudioImpl(samplingRate, encoding, holder, bitrate, length, size, address, tags, this.addUploaderForContent(uploader.getName()));
+                break;
+            case AudioVideo:
+                content = new AudioVideoImpl(samplingRate, width, height, encoding, bitrate, length, size, address, tags, this.addUploaderForContent(uploader.getName()));
+                break;
+            case Video:
+                content = new VideoImpl(width, height, encoding, bitrate, length, size, address, tags, this.addUploaderForContent(uploader.getName()));
+                break;
+            case Audio:
+                content = new AudioImpl(samplingRate, encoding, bitrate, length, size, address, tags, this.addUploaderForContent(uploader.getName()));
+                break;
+            default:
+                throw new IllegalArgumentException("MediaType was not found");
         }
+//        if (mediaType.equals(MediaType.InteractiveVideo)) {
+//            content = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate, type);
+//        } else if (mediaType.equals(MediaType.LicensedAudioVideo)) {
+//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
+//        } else if (mediaType.equals(MediaType.LicensedVideo)) {
+//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
+//        } else if (mediaType.equals(MediaType.LicensedAudio)) {
+//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
+//        } else if (mediaType.equals(MediaType.AudioVideo)) {
+//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
+//        } else if (mediaType.equals(MediaType.Video)) {
+//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
+//        } else if (mediaType.equals(MediaType.Audio)) {
+//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
+//        } else {
+//            throw new IllegalArgumentException("MediaType was not found");
+//        }
 
         boolean checked = this.checkIsSizeReached(content);
 
@@ -99,38 +134,38 @@ public class BusinessLogic implements Observable, Serializable {
         return true;
     }
 
-    public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, long accessCount, String uploader, Date uploadDate, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
-        Content content;
-
-        String address = this.generateAddress(mediaType, uploader, width, height);
-        BigDecimal size = this.generateSize(samplingRate, bitrate, width, height);
-
-        if (mediaType.equals(MediaType.InteractiveVideo)) {
-            content = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader), uploadDate, type);
-        } else if (mediaType.equals(MediaType.LicensedAudioVideo)) {
-            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader), uploadDate);
-        } else {
-            throw new IllegalArgumentException("MediaType was not found");
-        }
-
-        boolean checked = this.checkIsSizeReached(content);
-
-        if (checked) {
-            throw new SizeReachedException("capacity is reached");
-        }
-
-        this.getStorage().getListContent().add(content);
-        if (this.getStorage().getMapMediaTypeContent().get(mediaType) == null) {
-            List<Content> tmpList = new ArrayList<>();
-            tmpList.add(content);
-            this.getStorage().getMapMediaTypeContent().put(mediaType, tmpList);
-        } else {
-            this.getStorage().getMapMediaTypeContent().get(mediaType).add(content);
-        }
-        this.getStorage().getMapAddressContent().put(address, content);
-        this.notifyObserver();
-        return true;
-    }
+//    public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, long accessCount, String uploader, Date uploadDate, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
+//        Content content;
+//
+//        String address = this.generateAddress(mediaType, uploader, width, height);
+//        BigDecimal size = this.generateSize(samplingRate, bitrate, width, height);
+//
+////        if (mediaType.equals(MediaType.InteractiveVideo)) {
+////            content = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader), uploadDate, type);
+////        } else if (mediaType.equals(MediaType.LicensedAudioVideo)) {
+////            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader), uploadDate);
+////        } else {
+////            throw new IllegalArgumentException("MediaType was not found");
+////        }
+//
+//        boolean checked = this.checkIsSizeReached(content);
+//
+//        if (checked) {
+//            throw new SizeReachedException("capacity is reached");
+//        }
+//
+//        this.getStorage().getListContent().add(content);
+//        if (this.getStorage().getMapMediaTypeContent().get(mediaType) == null) {
+//            List<Content> tmpList = new ArrayList<>();
+//            tmpList.add(content);
+//            this.getStorage().getMapMediaTypeContent().put(mediaType, tmpList);
+//        } else {
+//            this.getStorage().getMapMediaTypeContent().get(mediaType).add(content);
+//        }
+//        this.getStorage().getMapAddressContent().put(address, content);
+//        this.notifyObserver();
+//        return true;
+//    }
 
     public boolean editContent(String oldContentAddress, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, String uploader, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
         Content oldContent = this.storage.getMapAddressContent().get(oldContentAddress);
@@ -147,9 +182,9 @@ public class BusinessLogic implements Observable, Serializable {
         BigDecimal size = this.generateSize(samplingRate, bitrate, width, height);
 
         if (mediaType.equals(MediaType.InteractiveVideo)) {
-            newContent = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, oldContent.getAccessCount(), this.addUploaderForContent(uploader), ((Uploadable) oldContent).getUploadDate(), type);
+            newContent = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, this.addUploaderForContent(uploader), type);
         } else if (mediaType.equals(MediaType.LicensedAudioVideo)) {
-            newContent = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, oldContent.getAccessCount(), this.addUploaderForContent(uploader), ((Uploadable) oldContent).getUploadDate());
+            newContent = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, this.addUploaderForContent(uploader));
         } else {
             throw new IllegalArgumentException("MediaType was not found");
         }

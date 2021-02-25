@@ -367,19 +367,19 @@ public class MediaStorage {
 
     //zaehlt dann die aufrufe, wenn eingefügt ist
     //bisher noch nicht noetig
-    public void raiseAccessCount(String address) {
-        for (Content k : listContent) {
-            if (k.getAddress().equals(address)) {
-                MediaContent mediaContent = (MediaContent) k;
-
-                if (k instanceof InteractiveVideo) {
-                    InteractiveVideo interactiveVideo = new InteractiveVideoImpl(((InteractiveVideo) k).getWidth(), ((InteractiveVideo) k).getHeight(), ((InteractiveVideo) k).getEncoding(), mediaContent.getBitrate(), mediaContent.getLength(), mediaContent.getSize(), k.getAddress(), k.getTags(), k.getAccessCount() + 1, ((InteractiveVideo) k).getUploader(), ((InteractiveVideo) k).getUploadDate(), ((InteractiveVideo) k).getType());
-                }
-
-                if (k instanceof LicensedAudioVideo) {
-                    LicensedAudioVideo licensedAudioVideo = new LicensedAudioVideoImpl(((LicensedAudioVideo) k).getSamplingRate(), ((LicensedAudioVideo) k).getWidth(), ((LicensedAudioVideo) k).getHeight(), ((LicensedAudioVideo) k).getEncoding(), ((LicensedAudioVideo) k).getHolder(), mediaContent.getBitrate(), mediaContent.getLength(), mediaContent.getSize(), k.getAddress(), k.getTags(), k.getAccessCount() + 1, ((LicensedAudioVideo) k).getUploader(), ((LicensedAudioVideo) k).getUploadDate());
-                }
-            }
-        }
-    }
+//    public void raiseAccessCount(String address) {
+//        for (Content k : listContent) {
+//            if (k.getAddress().equals(address)) {
+//                MediaContent mediaContent = (MediaContent) k;
+//
+//                if (k instanceof InteractiveVideo) {
+//                    InteractiveVideo interactiveVideo = new InteractiveVideoImpl(((InteractiveVideo) k).getWidth(), ((InteractiveVideo) k).getHeight(), ((InteractiveVideo) k).getEncoding(), mediaContent.getBitrate(), mediaContent.getLength(), mediaContent.getSize(), k.getAddress(), k.getTags(), k.getAccessCount() + 1, ((InteractiveVideo) k).getUploader(), ((InteractiveVideo) k).getUploadDate(), ((InteractiveVideo) k).getType());
+//                }
+//
+//                if (k instanceof LicensedAudioVideo) {
+//                    LicensedAudioVideo licensedAudioVideo = new LicensedAudioVideoImpl(((LicensedAudioVideo) k).getSamplingRate(), ((LicensedAudioVideo) k).getWidth(), ((LicensedAudioVideo) k).getHeight(), ((LicensedAudioVideo) k).getEncoding(), ((LicensedAudioVideo) k).getHolder(), mediaContent.getBitrate(), mediaContent.getLength(), mediaContent.getSize(), k.getAddress(), k.getTags(), k.getAccessCount() + 1, ((LicensedAudioVideo) k).getUploader(), ((LicensedAudioVideo) k).getUploadDate());
+//                }
+//            }
+//        }
+//    }
 }
