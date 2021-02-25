@@ -1,0 +1,31 @@
+/********************************************
+*                                           *
+*       Root                                *
+*                                           *
+*********************************************/
+
+.root {
+    -fx-accent: #e59700;
+    -fx-focus-color: -fx-accent;
+    -fx-base: #212121;
+    -fx-control-inner-background: derive(-fx-base, 50%);
+    -fx-control-inner-background-alt: -fx-control-inner-background;
+}
+
+.HBox {
+    -fx-min-width: 100%;
+    -fx-max-width: 100%;
+}
+
+.VBox {
+    -fx-min-width: 100%;
+    -fx-max-width: 100%;
+}
+
+.borderlessTextField {
+    -fx-background-color: transparent;
+}
+
+.menu-bar {
+    -fx-min-width: 100%;
+}
