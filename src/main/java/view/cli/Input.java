@@ -494,7 +494,7 @@ public class Input {
     }
 
     private String outputTextForInsert() {
-        return "###################################\n############## A D D ##############\n###################################\n\n" +
+        return "###################################\n########### I N S E R T ###########\n###################################\n\n" +
                 "[producer name]\n\tadd a uploader\n" +
                 "[media type] [producer name] [comma separated tags, single comma for none] [bitrate] [length] [[video encoding] [height] [width] [audio encoding] [sampling rate] [interaction type] [licensor]]\n" +
                 "\tadd media content\n";
@@ -519,7 +519,7 @@ public class Input {
     }
 
     private String outputTextForPersistence() {
-        return "###################################\n############# P E #############\n###################################\n\n" +
+        return "###################################\n###### P E R S I S T E N C E ######\n###################################\n\n" +
                 "[polling address]\n\tincreases the polling counter by one\n";
     }
 
