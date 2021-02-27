@@ -24,6 +24,11 @@ public class CheckTagsObserver implements Observer {
     }
 
     @Override
+    public String getName() {
+        return "CheckTagsObserver";
+    }
+
+    @Override
     public void update() {
         if (this.isSizeMoreAsNinetyPerCent()) {
             System.out.println("Update\n\tactually size: " + this.businessLogic.getStorageActuallySizeInPercent());

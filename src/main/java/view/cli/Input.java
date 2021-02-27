@@ -8,6 +8,7 @@ package view.cli;
 
 import exceptions.NotImplementsException;
 import logic.event.*;
+import logic.persistence.PersistenceType;
 import logic.utils.OutputSaver;
 import models.mediaDB.Tag;
 import models.mediaDB.UploaderImpl;
@@ -446,11 +447,9 @@ public class Input {
                 }
                 break;
             case SHOW:
-
                 if (inputStringSplitted[0].equals("uploader")) {
                     return new InputEventShowUploader(this, "InputEventShowUploader");
-                }
-                if (inputStringSplitted[0].equals("content")) {
+                } else if (inputStringSplitted[0].equals("content")) {
                     if (inputStringSplitted.length == 2) {
                         return new InputEventShowContent(this, "InputEventShowMediaByType", MediaType.valueOf(inputStringSplitted[1]));
                     } else if (inputStringSplitted.length == 1) {
@@ -458,8 +457,7 @@ public class Input {
                     } else {
                         throw new IllegalArgumentException("illegal media type");
                     }
-                }
-                if (inputStringSplitted[0].equals("tag")) {
+                } else if (inputStringSplitted[0].equals("tag")) {
                     if (inputStringSplitted.length == 2) {
                         return new InputEventShowContent(this, "InputEventShowMediaTags", inputStringSplitted[1].charAt(0));
                     } else if (inputStringSplitted.length == 1) {
@@ -467,19 +465,40 @@ public class Input {
                     } else {
                         throw new IllegalArgumentException("illegal media type");
                     }
+                } else {
+                    throw new IllegalArgumentException("illegal type");
                 }
-                break;
             case EDIT:
                 return new InputEventUpdateContent(this, "InputEventUpdateContent", inputStringSplitted[0]);
             //throw new NotImplementsException("EDIT MODE is yet not implements");
             case CONFIG:
-                throw new NotImplementsException("CONFIG MODE is yet not implements");
+                switch (inputStringSplitted[0]) {
+                    case "add":
+                        return new InputEventConfig(this, "InputEventConfig", inputStringSplitted[1], true, false);
+
+                    case "remove":
+                        return new InputEventConfig(this, "InputEventConfig", inputStringSplitted[1], false, false);
+
+                    case "show":
+                        return new InputEventConfig(this, "InputEventConfig", inputStringSplitted[1], false, true);
+
+                    default:
+                        throw new IllegalArgumentException();
+                }
+                //throw new NotImplementsException("CONFIG MODE is yet not implements");
             case PERSISTENCE:
                 if (inputStringSplitted[0].equals("saveJOS")) {
-                    return new InputEventPersistence(this, "InputEventPersistence");
+                    return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.SAVE_JOS);
+                } else if (inputStringSplitted[0].equals("loadJOS")) {
+                    return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.LOAD_JOS);
+                } else if (inputStringSplitted[0].equals("saveJBP")) {
+                    return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.SAVE_JBP);
+                } else if (inputStringSplitted[0].equals("loadJBP")) {
+                    return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.LOAD_JBP);
+                } else {
+                    throw new IllegalArgumentException("wrong persistence type");
                 }
-                break;
-            //throw new NotImplementsException("PERSISTENCE MODE is yet not implements");
+                //throw new NotImplementsException("PERSISTENCE MODE is yet not implements");
             default:
                 throw new IllegalArgumentException();
         }
@@ -524,11 +543,6 @@ public class Input {
 
     private String outputTextForPersistence() {
         return "###################################\n###### P E R S I S T E N C E ######\n###################################\n\n" +
-                "[polling address]\n\tincreases the polling counter by one\n";
-    }
-
-    private String outputTextForConfig() {
-        return "###################################\n########### C O N F I G ###########\n###################################\n\n" +
                 "saveJOS\n\tsaves using JOS\n" +
                 "loadJOS\n\tloads using JOS\n" +
                 "saveJBP\n\tsaves with JBP\n" +
@@ -537,28 +551,43 @@ public class Input {
                 "load [retrieval address]\n\tloads a single instance from the file\n";
     }
 
+    private String outputTextForConfig() {
+        return "###################################\n########### C O N F I G ###########\n###################################\n\n" +
+                "add [class name]\n\tregisters a named observer or listener\n" +
+                "remove [class name]\n\tunregisters a named observer or listener" +
+                "show observers\n\tshow all observers" +
+                "show listeners\n\tshow all listener";
+    }
+
     private String outputTextForRequestInput() {
         return "\nEnter input: ";
     }
 
     private String outputText() {
-        String outputText = this.outputTextForCommandSet();
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.outputTextForCommandSet());
         if (this.inputChoice != null) {
             if (this.inputChoice.equals(Choice.ADD)) {
-                outputText += this.outputTextForInsert();
+                sb.append(this.outputTextForInsert());
             }
             if (this.inputChoice.equals(Choice.DELETE)) {
-                outputText += this.outputTextForDelete();
+                sb.append(this.outputTextForDelete());
             }
             if (this.inputChoice.equals(Choice.SHOW)) {
-                outputText += this.outputTextForShow();
+                sb.append(this.outputTextForShow());
             }
             if (this.inputChoice.equals(Choice.EDIT)) {
-                outputText += this.outputTextForShow();
+                sb.append(this.outputTextForEdit());
+            }
+            if (this.inputChoice.equals(Choice.PERSISTENCE)) {
+                sb.append(this.outputTextForPersistence());
+            }
+            if (this.inputChoice.equals(Choice.CONFIG)) {
+                sb.append(this.outputTextForConfig());
             }
         }
-        outputText += this.outputTextForRequestInput();
-        return outputText;
+        sb.append(this.outputTextForRequestInput());
+        return sb.toString();
     }
 
     private void waitingContinue() throws IOException {

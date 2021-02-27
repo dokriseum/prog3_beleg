@@ -44,6 +44,12 @@ public class CheckSizePerCentObserver implements Observer {
     }
 
     @Override
+    public String getName() {
+        return "CheckSizePerCentObserver";
+    }
+
+
+    @Override
     public String toString() {
         return "WARNING\n\tactually size: " + this.businessLogic.getStorageActuallySizeInPercent();
     }
