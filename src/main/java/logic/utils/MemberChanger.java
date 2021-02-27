@@ -5,6 +5,10 @@ import models.mediaDB.Content;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 
+/*
+ * Inspirationsquelle: https://stackoverflow.com/questions/39411514/setting-value-without-a-setter-method-in-java-class
+ */
+
 public class MemberChanger {
 
     /*

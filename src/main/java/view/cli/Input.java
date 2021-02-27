@@ -518,6 +518,21 @@ public class Input {
                 "[polling address]\n\tincreases the polling counter by one\n";
     }
 
+    private String outputTextForPersistence() {
+        return "###################################\n############# P E #############\n###################################\n\n" +
+                "[polling address]\n\tincreases the polling counter by one\n";
+    }
+
+    private String outputTextForConfig() {
+        return "###################################\n########### C O N F I G ###########\n###################################\n\n" +
+                "saveJOS\n\tsaves using JOS\n" +
+                "loadJOS\n\tloads using JOS\n" +
+                "saveJBP\n\tsaves with JBP\n" +
+                "loadJBP\n\tloads using JBP\n" +
+                "save [retrieval address]\n\tsaves a single instance into a file for all instances, if the file does not exist all instances are saved into a new one\n" +
+                "load [retrieval address]\n\tloads a single instance from the file\n";
+    }
+
     private String outputTextForRequestInput() {
         return "\nEnter input: ";
     }
