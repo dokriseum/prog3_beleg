@@ -475,7 +475,11 @@ public class Input {
             case CONFIG:
                 throw new NotImplementsException("CONFIG MODE is yet not implements");
             case PERSISTENCE:
-                throw new NotImplementsException("PERSISTENCE MODE is yet not implements");
+                if (inputStringSplitted[0].equals("saveJOS")) {
+                    return new InputEventPersistence(this, "InputEventPersistence");
+                }
+                break;
+            //throw new NotImplementsException("PERSISTENCE MODE is yet not implements");
             default:
                 throw new IllegalArgumentException();
         }

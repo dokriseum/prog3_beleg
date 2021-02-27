@@ -5,7 +5,7 @@ import models.storage.Storage;
 import java.io.IOException;
 
 public interface Persistence {
-    boolean save(String path, Storage storage) throws IOException;
+    boolean save(PersistenceType type, Storage storage) throws IOException;
 
-    Object load(String path) throws IOException, ClassNotFoundException;
+    boolean load(PersistenceType type) throws IOException, ClassNotFoundException;
 }

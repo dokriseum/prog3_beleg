@@ -12,12 +12,12 @@ import logic.crud.LogicCRUD;
 import logic.observer.Observable;
 import logic.observer.Observer;
 import logic.persistence.PersistenceStorage;
+import logic.persistence.PersistenceType;
+import logic.utils.MemberChanger;
 import models.mediaDB.*;
 import models.storage.MediaType;
-import models.storage.Storage;
 import models.storage.StorageContent;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -65,6 +65,53 @@ public class BusinessLogic implements Observable, Serializable {
     /*
      * old
      */
+
+    public boolean uploadContent(Content content) throws SizeReachedException {
+        String address = this.generateAddress(content.getAddress());
+        try {
+            MemberChanger.writeString(content, "address", address);
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        boolean checked = this.checkIsSizeReached(content);
+
+        if (checked) {
+            throw new SizeReachedException("capacity is reached");
+        }
+        MediaType mediaType;
+
+        if (content instanceof InteractiveVideo) {
+            mediaType = MediaType.InteractiveVideo;
+        } else if (content instanceof LicensedAudioVideo) {
+            mediaType = MediaType.LicensedAudioVideo;
+        } else if (content instanceof LicensedVideo) {
+            mediaType = MediaType.LicensedVideo;
+        } else if (content instanceof LicensedAudio) {
+            mediaType = MediaType.LicensedAudio;
+        } else if (content instanceof AudioVideo) {
+            mediaType = MediaType.AudioVideo;
+        } else if (content instanceof Video) {
+            mediaType = MediaType.Video;
+        } else if (content instanceof Audio) {
+            mediaType = MediaType.Audio;
+        } else {
+            throw new IllegalArgumentException("MediaType was not found");
+        }
+
+        this.getStorage().getListContent().add(content);
+        if (this.getStorage().getMapMediaTypeContent().get(mediaType) == null) {
+            List<Content> tmpList = new ArrayList<>();
+            tmpList.add(content);
+            this.getStorage().getMapMediaTypeContent().put(mediaType, tmpList);
+        } else {
+            this.getStorage().getMapMediaTypeContent().get(mediaType).add(content);
+        }
+        this.getStorage().getMapAddressContent().put(address, content);
+        this.notifyObserver();
+        return true;
+    }
 
     public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, Uploader uploader, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
         Content content;
@@ -377,27 +424,8 @@ public class BusinessLogic implements Observable, Serializable {
         return !(checked >= 0);
     }
 
-    public boolean saveStorage(String address) {
-        try {
-            this.persistence.save(address, this.storage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return true;
-    }
-
-    public boolean loadStorage(String address) {
-        try {
-            if (this.persistence.load(address) instanceof Storage) {
-                this.storage = (StorageContent) this.persistence.load(address);
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        } catch (ClassNotFoundException e) {
-            System.err.println(e.getMessage());
-        }
-
-        return true;
+    public boolean persistence_storage(PersistenceType type) {
+        return this.persistence_storage(type);
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -537,6 +565,33 @@ public class BusinessLogic implements Observable, Serializable {
         Uploader uploader = new UploaderImpl(name);
         listUploader.add(uploader);
         return uploader;
+    }
+
+    private String generateAddress(String address) {
+        String temp_address;
+        StringBuffer sb = new StringBuffer();
+        String[] temp_address_array;
+        boolean isNotAvailable = false;
+        for (Content k1 : this.storage.getListContent()) {
+            if (k1.getAddress().equals(address)) {
+                isNotAvailable = true;
+            }
+        }
+        if (isNotAvailable) {
+            temp_address_array = address.split("\\+");
+            for (int i = 0; i < temp_address_array.length; i++) {
+                if (i == (temp_address_array.length - 1)) {
+                    sb.append("+" + addressCounter);
+                } else {
+                    sb.append(temp_address_array[i]);
+                }
+            }
+            temp_address = sb.toString();
+        } else {
+            temp_address = address;
+        }
+        addressCounter++;
+        return temp_address;
     }
 
     private String generateAddress(MediaType mediaType, String uploader, int width, int height) {
