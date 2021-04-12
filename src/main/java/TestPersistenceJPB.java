@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class PersistenceJPB {
+public class TestPersistenceJPB {
     public static void main(String[] args) {
 
         BusinessLogic bl = new BusinessLogic(new StorageContent(new BigDecimal("123456")));
