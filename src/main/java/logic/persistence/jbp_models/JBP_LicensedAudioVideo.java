@@ -9,7 +9,6 @@ package logic.persistence.jbp_models;
 import models.mediaDB.LicensedAudioVideo;
 import models.mediaDB.Tag;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 public class JBP_LicensedAudioVideo extends PersistenceItem {
@@ -21,7 +20,7 @@ public class JBP_LicensedAudioVideo extends PersistenceItem {
     private long length;
     private String size;
     private String address;
-    private String[] tags;
+    private Collection<Tag> tags;
     private long accessCount;
     private String uploader;
     private long uploadDate;
@@ -37,7 +36,7 @@ public class JBP_LicensedAudioVideo extends PersistenceItem {
         this.length = licensed_audio_video.getLength().getSeconds();
         this.size = licensed_audio_video.getSize().toPlainString();
         this.address = licensed_audio_video.getAddress();
-        this.tags = this.fillCollection(licensed_audio_video.getTags());
+        this.tags = licensed_audio_video.getTags();
         this.accessCount = licensed_audio_video.getAccessCount();
         this.bitrate = licensed_audio_video.getBitrate();
         this.uploader = licensed_audio_video.getUploader().getName();
@@ -54,7 +53,7 @@ public class JBP_LicensedAudioVideo extends PersistenceItem {
         this.length = length;
         this.size = size;
         this.address = address;
-        this.tags = this.fillCollection(tags);
+        this.tags = tags;
         this.accessCount = accessCount;
         this.uploader = uploader;
         this.uploadDate = uploadDate;
@@ -68,6 +67,26 @@ public class JBP_LicensedAudioVideo extends PersistenceItem {
             array[i] = ((Tag) tags_array[i]).name();
         }
         return array;
+    }
+
+
+    @Override
+    public String toString() {
+        return "JBP_LicensedAudioVideo{" +
+                "width=" + width +
+                ", height=" + height +
+                ", sampling_rate=" + sampling_rate +
+                ", encoding='" + encoding + '\'' +
+                ", bitrate=" + bitrate +
+                ", length=" + length +
+                ", size='" + size + '\'' +
+                ", address='" + address + '\'' +
+                ", tags=" + tags.toString() +
+                ", accessCount=" + accessCount +
+                ", uploader='" + uploader + '\'' +
+                ", uploadDate=" + uploadDate +
+                ", holder='" + holder + '\'' +
+                '}';
     }
 
     public int getWidth() {
@@ -102,8 +121,12 @@ public class JBP_LicensedAudioVideo extends PersistenceItem {
         return address;
     }
 
-    public String[] getTags() {
+    public Collection<Tag> getTags() {
         return tags;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
     }
 
     public long getAccessCount() {
@@ -122,22 +145,51 @@ public class JBP_LicensedAudioVideo extends PersistenceItem {
         return holder;
     }
 
-    @Override
-    public String toString() {
-        return "JBP_LicensedAudioVideo{" +
-                "width=" + width +
-                ", height=" + height +
-                ", sampling_rate=" + sampling_rate +
-                ", encoding='" + encoding + '\'' +
-                ", bitrate=" + bitrate +
-                ", length=" + length +
-                ", size='" + size + '\'' +
-                ", address='" + address + '\'' +
-                ", tags=" + Arrays.toString(tags) +
-                ", accessCount=" + accessCount +
-                ", uploader='" + uploader + '\'' +
-                ", uploadDate=" + uploadDate +
-                ", holder='" + holder + '\'' +
-                '}';
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setSamplingRate(int sampling_rate) {
+        this.sampling_rate = sampling_rate;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    public void setBitrate(long bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
+    }
+
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
+    }
+
+    public void setUploadDate(long uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    public void setHolder(String holder) {
+        this.holder = holder;
     }
 }

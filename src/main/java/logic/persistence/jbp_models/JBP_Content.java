@@ -16,6 +16,9 @@ public class JBP_Content extends PersistenceItem {
     private Collection<Tag> tags;
     private long accessCount;
 
+    public JBP_Content() {
+    }
+
     public JBP_Content(Content content) {
         this.address = content.getAddress();
         this.tags = content.getTags();
@@ -38,5 +41,17 @@ public class JBP_Content extends PersistenceItem {
 
     public long getAccessCount() {
         return accessCount;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
     }
 }

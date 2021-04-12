@@ -24,6 +24,9 @@ public class JBP_Video extends PersistenceItem {
     private String uploader;
     private long uploadDate;
 
+    public JBP_Video() {
+    }
+
     public JBP_Video(Video video) {
         this.width = video.getWidth();
         this.height = video.getHeight();
@@ -95,5 +98,49 @@ public class JBP_Video extends PersistenceItem {
 
     public long getUploadDate() {
         return uploadDate;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    public void setBitrate(long bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
+    }
+
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
+    }
+
+    public void setUploadDate(long uploadDate) {
+        this.uploadDate = uploadDate;
     }
 }

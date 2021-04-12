@@ -17,6 +17,9 @@ public class JBP_Interactive extends PersistenceItem {
     private long accessCount;
     private String type;
 
+    public JBP_Interactive() {
+    }
+
     public JBP_Interactive(Interactive interactive) {
         this.address = interactive.getAddress();
         this.tags = interactive.getTags();
@@ -45,5 +48,21 @@ public class JBP_Interactive extends PersistenceItem {
 
     public String getType() {
         return type;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

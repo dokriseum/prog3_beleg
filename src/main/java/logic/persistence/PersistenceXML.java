@@ -5,11 +5,9 @@ import models.mediaDB.*;
 
 import java.awt.*;
 import java.beans.ExceptionListener;
+import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class PersistenceXML {
     public void save(Content content, String address) {
@@ -33,7 +31,7 @@ public class PersistenceXML {
             throw new IllegalArgumentException("wrong data");
         }
 
-        File file = new File("c.xml");
+        File file = new File("storage.xml");
         file.delete();
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -44,6 +42,7 @@ public class PersistenceXML {
                     e.printStackTrace();
                 }
             });
+            System.out.println(item.toString());
             encoder.writeObject(item);
             encoder.close();
             fos.close();
@@ -57,5 +56,25 @@ public class PersistenceXML {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Content load(Content content, String address) {
+        try {
+            FileInputStream fis = new FileInputStream("Content.xml");
+            XMLDecoder decoder = new XMLDecoder(fis);
+            decoder.setExceptionListener(new ExceptionListener() {
+                @Override
+                public void exceptionThrown(Exception e) {
+
+                }
+            });
+            //if wie bei save() und dann decoder.readObject(); mit cast zu gefifter Objektart
+
+            decoder.close();
+            //Content loadedContent = (Content) convertSerializableToContent(JBP_Content);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

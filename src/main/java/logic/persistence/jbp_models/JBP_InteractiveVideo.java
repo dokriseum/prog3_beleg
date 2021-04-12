@@ -25,6 +25,9 @@ public class JBP_InteractiveVideo extends PersistenceItem {
     private long uploadDate;
     private String type;
 
+    public JBP_InteractiveVideo() {
+    }
+
     public JBP_InteractiveVideo(InteractiveVideo interactive_video) {
         this.width = interactive_video.getWidth();
         this.height = interactive_video.getHeight();
@@ -102,5 +105,53 @@ public class JBP_InteractiveVideo extends PersistenceItem {
 
     public String getType() {
         return type;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    public void setBitrate(long bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
+    }
+
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
+    }
+
+    public void setUploadDate(long uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

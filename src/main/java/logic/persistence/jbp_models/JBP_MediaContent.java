@@ -19,6 +19,9 @@ public class JBP_MediaContent extends PersistenceItem {
     private long length;
     private String size;
 
+    public JBP_MediaContent() {
+    }
+
     public JBP_MediaContent(MediaContent media_content) {
         this.address = media_content.getAddress();
         this.tags = media_content.getTags();
@@ -59,5 +62,29 @@ public class JBP_MediaContent extends PersistenceItem {
 
     public long getAccessCount() {
         return accessCount;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
+    }
+
+    public void setBitrate(long bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

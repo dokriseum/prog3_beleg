@@ -17,6 +17,9 @@ public class JBP_Audio extends PersistenceItem {
     private String uploader;
     private long uploadDate;
 
+    public JBP_Audio() {
+    }
+
     public JBP_Audio(Audio audio) {
         this.sampling_rate = audio.getSamplingRate();
         this.encoding = audio.getEncoding();
@@ -44,7 +47,7 @@ public class JBP_Audio extends PersistenceItem {
         this.uploadDate = uploadDate;
     }
 
-    public int getSampling_rate() {
+    public int getSamplingRate() {
         return sampling_rate;
     }
 
@@ -82,5 +85,45 @@ public class JBP_Audio extends PersistenceItem {
 
     public long getUploadDate() {
         return uploadDate;
+    }
+
+    public void setSamplingRate(int sampling_rate) {
+        this.sampling_rate = sampling_rate;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    public void setBitrate(long bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
+    }
+
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
+    }
+
+    public void setUploadDate(long uploadDate) {
+        this.uploadDate = uploadDate;
     }
 }

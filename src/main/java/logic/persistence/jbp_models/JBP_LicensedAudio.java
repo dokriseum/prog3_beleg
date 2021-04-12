@@ -24,6 +24,11 @@ public class JBP_LicensedAudio extends PersistenceItem {
     private long uploadDate;
     private String holder;
 
+    @Override
+    public String toString() {
+        return "JBP_LicensedAudio{}";
+    }
+
     public JBP_LicensedAudio(LicensedAudio licensed_audio) {
         this.sampling_rate = licensed_audio.getSamplingRate();
         this.encoding = licensed_audio.getEncoding();
@@ -95,5 +100,49 @@ public class JBP_LicensedAudio extends PersistenceItem {
 
     public String getHolder() {
         return holder;
+    }
+
+    public void setSamplingRate(int sampling_rate) {
+        this.sampling_rate = sampling_rate;
+    }
+
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    public void setBitrate(long bitrate) {
+        this.bitrate = bitrate;
+    }
+
+    public void setLength(long length) {
+        this.length = length;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTags(Collection<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public void setAccessCount(long accessCount) {
+        this.accessCount = accessCount;
+    }
+
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
+    }
+
+    public void setUploadDate(long uploadDate) {
+        this.uploadDate = uploadDate;
+    }
+
+    public void setHolder(String holder) {
+        this.holder = holder;
     }
 }

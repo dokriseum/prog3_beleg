@@ -32,4 +32,12 @@ public class JBP_Uploadable extends PersistenceItem {
     public long getUploadDate() {
         return this.upload_date;
     }
+
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
+    }
+
+    public void setUploadDate(long upload_date) {
+        this.upload_date = upload_date;
+    }
 }
