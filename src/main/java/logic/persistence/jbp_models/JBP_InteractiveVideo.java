@@ -4,17 +4,16 @@
  * @since 1.8
  */
 
-package logic.persistence.models;
+package logic.persistence.jbp_models;
 
-import models.mediaDB.AudioVideo;
+import models.mediaDB.InteractiveVideo;
 import models.mediaDB.Tag;
 
 import java.util.Collection;
 
-public class JBP_AudioVideo extends PersistenceItem {
+public class JBP_InteractiveVideo extends PersistenceItem {
     private int width;
     private int height;
-    private int sampling_rate;
     private String encoding;
     private long bitrate;
     private long length;
@@ -24,25 +23,27 @@ public class JBP_AudioVideo extends PersistenceItem {
     private long accessCount;
     private String uploader;
     private long uploadDate;
+    private String type;
 
-    public JBP_AudioVideo(AudioVideo audio_video) {
-        this.sampling_rate = audio_video.getSamplingRate();
-        this.encoding = audio_video.getEncoding();
-        this.bitrate = audio_video.getBitrate();
-        this.length = audio_video.getLength().getSeconds();
-        this.size = audio_video.getSize().toPlainString();
-        this.address = audio_video.getAddress();
-        this.tags = audio_video.getTags();
-        this.accessCount = audio_video.getAccessCount();
-        this.bitrate = audio_video.getBitrate();
-        this.uploader = audio_video.getUploader().getName();
-        this.uploadDate = audio_video.getUploadDate().getTime();
+    public JBP_InteractiveVideo(InteractiveVideo interactive_video) {
+        this.width = interactive_video.getWidth();
+        this.height = interactive_video.getHeight();
+        this.encoding = interactive_video.getEncoding();
+        this.bitrate = interactive_video.getBitrate();
+        this.length = interactive_video.getLength().getSeconds();
+        this.size = interactive_video.getSize().toPlainString();
+        this.address = interactive_video.getAddress();
+        this.tags = interactive_video.getTags();
+        this.accessCount = interactive_video.getAccessCount();
+        this.bitrate = interactive_video.getBitrate();
+        this.uploader = interactive_video.getUploader().getName();
+        this.uploadDate = interactive_video.getUploadDate().getTime();
+        this.type = interactive_video.getType();
     }
 
-    public JBP_AudioVideo(int width, int height, int sampling_rate, String encoding, long bitrate, long length, String size, String address, Collection<Tag> tags, long accessCount, String uploader, long uploadDate) {
+    public JBP_InteractiveVideo(int width, int height, String encoding, long bitrate, long length, String size, String address, Collection<Tag> tags, long accessCount, String uploader, long uploadDate, String type) {
         this.width = width;
         this.height = height;
-        this.sampling_rate = sampling_rate;
         this.encoding = encoding;
         this.bitrate = bitrate;
         this.length = length;
@@ -52,6 +53,7 @@ public class JBP_AudioVideo extends PersistenceItem {
         this.accessCount = accessCount;
         this.uploader = uploader;
         this.uploadDate = uploadDate;
+        this.type = type;
     }
 
     public int getWidth() {
@@ -60,10 +62,6 @@ public class JBP_AudioVideo extends PersistenceItem {
 
     public int getHeight() {
         return height;
-    }
-
-    public int getSamplingRate() {
-        return sampling_rate;
     }
 
     public String getEncoding() {
@@ -100,5 +98,9 @@ public class JBP_AudioVideo extends PersistenceItem {
 
     public long getUploadDate() {
         return uploadDate;
+    }
+
+    public String getType() {
+        return type;
     }
 }

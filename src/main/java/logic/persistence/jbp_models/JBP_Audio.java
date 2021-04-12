@@ -1,4 +1,4 @@
-package logic.persistence.models;
+package logic.persistence.jbp_models;
 
 import models.mediaDB.Audio;
 import models.mediaDB.Tag;

@@ -4,7 +4,7 @@
  * @since 1.8
  */
 
-package logic.persistence.models;
+package logic.persistence.jbp_models;
 
 import models.mediaDB.Interactive;
 import models.mediaDB.Tag;

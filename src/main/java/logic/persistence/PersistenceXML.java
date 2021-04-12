@@ -1,6 +1,6 @@
 package logic.persistence;
 
-import logic.persistence.models.*;
+import logic.persistence.jbp_models.*;
 import models.mediaDB.*;
 
 import java.awt.*;
