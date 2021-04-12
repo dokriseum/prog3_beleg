@@ -7,12 +7,8 @@
 package logic;
 
 import exceptions.SizeReachedException;
-import logic.crud.Logic;
-import logic.crud.LogicCRUD;
 import logic.observer.Observable;
 import logic.observer.Observer;
-import logic.persistence.PersistenceStorage;
-import logic.persistence.PersistenceType;
 import logic.utils.MemberChanger;
 import models.mediaDB.*;
 import models.storage.MediaType;
@@ -28,8 +24,6 @@ public class BusinessLogic implements Observable, Serializable {
     private List<Uploader> listUploader;
     private long addressCounter;
     private List<Observer> observers;
-    private PersistenceStorage persistence = new PersistenceStorage(this);
-    private Logic lCRUD;
 
     public BusinessLogic() {
         this.storage = new StorageContent(new BigDecimal("1"));
@@ -48,22 +42,17 @@ public class BusinessLogic implements Observable, Serializable {
         this.listUploader = new ArrayList<>();
         this.addressCounter = 0;
         this.observers = new LinkedList<>();
-        this.lCRUD = new LogicCRUD(this.storage);
     }
 
     public BusinessLogic(BigDecimal size) {
-        if (storage == null) {
-            throw new IllegalArgumentException("storage must not nullable");
-        }
-        this.storage = storage;
+        this.storage = new StorageContent(size);
         this.listUploader = new ArrayList<>();
         this.addressCounter = 0;
         this.observers = new LinkedList<>();
-        this.lCRUD = new LogicCRUD(this.storage);
     }
 
     /*
-     * old
+     * CRUD
      */
 
     public boolean uploadContent(Content content) throws SizeReachedException {
@@ -144,23 +133,6 @@ public class BusinessLogic implements Observable, Serializable {
             default:
                 throw new IllegalArgumentException("MediaType was not found");
         }
-//        if (mediaType.equals(MediaType.InteractiveVideo)) {
-//            content = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate, type);
-//        } else if (mediaType.equals(MediaType.LicensedAudioVideo)) {
-//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
-//        } else if (mediaType.equals(MediaType.LicensedVideo)) {
-//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
-//        } else if (mediaType.equals(MediaType.LicensedAudio)) {
-//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
-//        } else if (mediaType.equals(MediaType.AudioVideo)) {
-//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
-//        } else if (mediaType.equals(MediaType.Video)) {
-//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
-//        } else if (mediaType.equals(MediaType.Audio)) {
-//            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader.getName()), uploadDate);
-//        } else {
-//            throw new IllegalArgumentException("MediaType was not found");
-//        }
 
         boolean checked = this.checkIsSizeReached(content);
 
@@ -180,39 +152,6 @@ public class BusinessLogic implements Observable, Serializable {
         this.notifyObserver();
         return true;
     }
-
-//    public boolean uploadContent(MediaType mediaType, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, long accessCount, String uploader, Date uploadDate, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
-//        Content content;
-//
-//        String address = this.generateAddress(mediaType, uploader, width, height);
-//        BigDecimal size = this.generateSize(samplingRate, bitrate, width, height);
-//
-////        if (mediaType.equals(MediaType.InteractiveVideo)) {
-////            content = new InteractiveVideoImpl(width, height, encoding, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader), uploadDate, type);
-////        } else if (mediaType.equals(MediaType.LicensedAudioVideo)) {
-////            content = new LicensedAudioVideoImpl(samplingRate, width, height, encoding, holder, bitrate, length, size, address, tags, accessCount, this.addUploaderForContent(uploader), uploadDate);
-////        } else {
-////            throw new IllegalArgumentException("MediaType was not found");
-////        }
-//
-//        boolean checked = this.checkIsSizeReached(content);
-//
-//        if (checked) {
-//            throw new SizeReachedException("capacity is reached");
-//        }
-//
-//        this.getStorage().getListContent().add(content);
-//        if (this.getStorage().getMapMediaTypeContent().get(mediaType) == null) {
-//            List<Content> tmpList = new ArrayList<>();
-//            tmpList.add(content);
-//            this.getStorage().getMapMediaTypeContent().put(mediaType, tmpList);
-//        } else {
-//            this.getStorage().getMapMediaTypeContent().get(mediaType).add(content);
-//        }
-//        this.getStorage().getMapAddressContent().put(address, content);
-//        this.notifyObserver();
-//        return true;
-//    }
 
     public boolean editContent(String oldContentAddress, int samplingRate, int width, int height, String encoding, String holder, long bitrate, Duration length, Collection<Tag> tags, String uploader, String type) throws IllegalArgumentException, IndexOutOfBoundsException, SizeReachedException {
         Content oldContent = this.storage.getMapAddressContent().get(oldContentAddress);
@@ -304,43 +243,6 @@ public class BusinessLogic implements Observable, Serializable {
         return true;
     }
 
-    public List<Tag> showAvailableTags() {
-        if (storage == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-        List<Tag> listAvailableTags = new ArrayList<>();
-
-        for (Content k1 : storage.getListContent()) {
-            if (k1.getTags() != null) {
-                for (Tag k2 : k1.getTags()) {
-                    if (!listAvailableTags.contains(k2)) {
-                        listAvailableTags.add(k2);
-                    }
-                }
-            }
-        }
-
-        return listAvailableTags;
-    }
-
-    public List<Tag> showNotAvailableTags() {
-        if (storage == null) {
-            throw new NullPointerException("Storage isn't available.");
-        }
-        List<Tag> listNotAvailableTags = new ArrayList<>();
-        listNotAvailableTags.addAll(EnumSet.allOf(Tag.class));
-
-        for (Content k1 : storage.getListContent()) {
-            if (k1.getTags() != null) {
-                for (Tag k2 : k1.getTags()) {
-                    listNotAvailableTags.remove(k2);
-                }
-            }
-        }
-
-        return listNotAvailableTags;
-    }
-
     public boolean createUploader(String name) {
         Uploader uploader = new UploaderImpl(name);
         if (listUploader != null) {
@@ -397,6 +299,14 @@ public class BusinessLogic implements Observable, Serializable {
         return false;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                  //
+    //                                                                                                  //
+    //                                     OBSERVERS                                                    //
+    //                                                                                                  //
+    //                                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public boolean observeAreTagsUpdated() {
         return false;
     }
@@ -424,10 +334,6 @@ public class BusinessLogic implements Observable, Serializable {
         return !(checked >= 0);
     }
 
-    public boolean persistence_storage(PersistenceType type) {
-        return this.persistence_storage(type);
-    }
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                                                                  //
     //                                                                                                  //
@@ -435,6 +341,44 @@ public class BusinessLogic implements Observable, Serializable {
     //                                                                                                  //
     //                                                                                                  //
     //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    public List<Tag> showAvailableTags() {
+        if (storage == null) {
+            throw new NullPointerException("Storage isn't available.");
+        }
+        List<Tag> listAvailableTags = new ArrayList<>();
+
+        for (Content k1 : storage.getListContent()) {
+            if (k1.getTags() != null) {
+                for (Tag k2 : k1.getTags()) {
+                    if (!listAvailableTags.contains(k2)) {
+                        listAvailableTags.add(k2);
+                    }
+                }
+            }
+        }
+
+        return listAvailableTags;
+    }
+
+    public List<Tag> showNotAvailableTags() {
+        if (storage == null) {
+            throw new NullPointerException("Storage isn't available.");
+        }
+        List<Tag> listNotAvailableTags = new ArrayList<>();
+        listNotAvailableTags.addAll(EnumSet.allOf(Tag.class));
+
+        for (Content k1 : storage.getListContent()) {
+            if (k1.getTags() != null) {
+                for (Tag k2 : k1.getTags()) {
+                    listNotAvailableTags.remove(k2);
+                }
+            }
+        }
+
+        return listNotAvailableTags;
+    }
 
     public List<Uploader> getUploaders() {
         return listUploader;
@@ -555,6 +499,15 @@ public class BusinessLogic implements Observable, Serializable {
         return listContent;
     }
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                                                                  //
+    //                                                                                                  //
+    //                                  PRIVATE METHODS                                                 //
+    //                                                                                                  //
+    //                                                                                                  //
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private Uploader addUploaderForContent(String name) {
         for (Uploader k : listUploader) {
             if (name.equals(k.getName())) {
@@ -603,11 +556,6 @@ public class BusinessLogic implements Observable, Serializable {
     private BigDecimal generateSize(long samplingRate, long bitrate, int width, int height) {
         BigDecimal size = BigDecimal.valueOf(width + height);
         return size;
-    }
-
-    private boolean upload(Content content) {
-        storage.getListContent().add(content);
-        return true;
     }
 
     private MediaContent parseContent(Uploadable uploadable) {

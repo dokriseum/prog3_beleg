@@ -9,6 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.net.Socket;
 
 import static org.mockito.Mockito.mock;
@@ -40,7 +41,19 @@ class MediaServerTest {
     }
 
     @Test
-    public void goodTestCommunication() throws IOException {
+    public void goodTestConnection() {
+        try {
+            ServerSocket mockServerSocket = mock(ServerSocket.class);
+            Socket mockSocket = mockServerSocket.accept();
+            MediaServer server = new MediaServer(mockSocket);
+            when(mockServerSocket.accept()).thenReturn(mockSocket);
+        } catch (IOException e) {
+            Assertions.fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void goodTestCommunicationShowOutput() throws IOException {
         Socket mockSocket = mock(Socket.class);
         MediaServer server = new MediaServer(mockSocket);
         ByteArrayOutputStream bos = new ByteArrayOutputStream(14);
