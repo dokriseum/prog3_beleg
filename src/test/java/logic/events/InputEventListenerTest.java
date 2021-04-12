@@ -8,11 +8,11 @@ import models.storage.StorageContent;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.io.PrintStream;
 import java.math.BigDecimal;
 
-import static org.mockito.Mockito.*;
 
 class InputEventListenerTest {
     private StorageContent testStorageContent;
@@ -27,27 +27,27 @@ class InputEventListenerTest {
     @Test
     public void testGoodInputEventListenerAddUploader1() {
         InputEventListenerAddUploader listener = new InputEventListenerAddUploader(testBusinessLogic);
-        InputEventAddUploader mockInputEventAddUploader = mock(InputEventAddUploader.class);
+        InputEventAddUploader mockInputEventAddUploader = Mockito.mock(InputEventAddUploader.class);
         listener.onInputEvent(mockInputEventAddUploader);
-        verify(mockInputEventAddUploader, atLeastOnce()).getEventUploader();
-        verify(mockInputEventAddUploader, never()).getSource();
+        Mockito.verify(mockInputEventAddUploader, Mockito.atLeastOnce()).getEventUploader();
+        Mockito.verify(mockInputEventAddUploader, Mockito.never()).getSource();
     }
 
     @Test
     void properOutput() {
         PrintStream originalOut = System.out;
         try {
-            PrintStream out = mock(PrintStream.class);
+            PrintStream out = Mockito.mock(PrintStream.class);
             System.setOut(out);
-            InputEventAddUploader event = mock(InputEventAddUploader.class);
-            when(event.getText()).thenReturn("InputEventAddUploader");
+            InputEventAddUploader event = Mockito.mock(InputEventAddUploader.class);
+            Mockito.when(event.getText()).thenReturn("InputEventAddUploader");
             InputEventListenerOutput listenerOutput = new InputEventListenerOutput(testBusinessLogic);
 
 
             listenerOutput.onInputEvent(event);
 
 
-            verify(out).println("input=InputEventAddUploader");
+            Mockito.verify(out).println("input=InputEventAddUploader");
         } finally {
             System.setOut(originalOut);
         }
