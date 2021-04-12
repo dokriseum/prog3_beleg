@@ -149,14 +149,14 @@ public class Input {
                         this.output.append(OutputSaver.getOutput());
                         OutputSaver.setIsShowEvent(false);
                     }
-                    //System.out.println("Anfang IO " + this.inputChoice);
                     output.append(this.outputText());
-                    //System.out.println(output);
                     this.streamOutputData.writeUTF(output.toString());
-                    //TODO: entfernen
-                    System.out.println("\nInputOutput -> output");
 
-                    inputString = streamInputData.readUTF();
+                    try {
+                        inputString = streamInputData.readUTF();
+                    } catch (EOFException exception) {
+                        System.err.println("set no input stream");
+                    }
                 }
 
                 if (inputString == null)
@@ -178,9 +178,9 @@ public class Input {
                         }
                     }
                 } catch (IllegalArgumentException e) {
-                    System.err.println(e.getMessage());
+                    System.err.println("illegal input");
                 } catch (NotImplementsException e) {
-                    System.err.println(e.getMessage());
+                    System.err.println("wrong method");
                 }
             }
 
