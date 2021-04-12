@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_271" class="java.beans.XMLDecoder">
+ <object class="logic.persistence.jbp_models.JBP_Storage" id="JBP_Storage0">
+  <void property="items">
+   <void method="add">
+    <object class="logic.persistence.jbp_models.JBP_InteractiveVideo">
+     <void property="address">
+      <string>InteractiveVideo#Produzent1#480x640+0</string>
+     </void>
+     <void property="bitrate">
+      <long>5000</long>
+     </void>
+     <void property="encoding">
+      <string>DWT</string>
+     </void>
+     <void property="height">
+      <int>640</int>
+     </void>
+     <void property="length">
+      <long>3600</long>
+     </void>
+     <void property="size">
+      <string>1120</string>
+     </void>
+     <void property="tags">
+      <object class="java.util.ArrayList">
+       <void method="add">
+        <object class="java.lang.Enum" method="valueOf">
+         <class>models.mediaDB.Tag</class>
+         <string>Lifestyle</string>
+        </object>
+       </void>
+       <void method="add">
+        <object class="java.lang.Enum" method="valueOf">
+         <class>models.mediaDB.Tag</class>
+         <string>News</string>
+        </object>
+       </void>
+      </object>
+     </void>
+     <void property="type">
+      <string>Abstimmung</string>
+     </void>
+     <void property="uploadDate">
+      <long>1618258318969</long>
+     </void>
+     <void property="uploader">
+      <string>Produzent1</string>
+     </void>
+     <void property="width">
+      <int>480</int>
+     </void>
+    </object>
+   </void>
+  </void>
+ </object>
+</java>

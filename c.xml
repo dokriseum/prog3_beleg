@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_271" class="java.beans.XMLDecoder">
+ <object class="logic.persistence.jbp_models.JBP_LicensedAudioVideo">
+  <void property="address">
+   <string>LicensedAudioVideo#UPU#1x1+0</string>
+  </void>
+  <void property="bitrate">
+   <long>2</long>
+  </void>
+  <void property="encoding">
+   <string>ABC</string>
+  </void>
+  <void property="holder">
+   <string>CBS</string>
+  </void>
+  <void property="length">
+   <long>231</long>
+  </void>
+  <void property="sampling_rate">
+   <int>1</int>
+  </void>
+  <void property="size">
+   <string>2</string>
+  </void>
+  <void property="tags">
+   <object class="java.util.ArrayList">
+    <void method="add">
+     <object class="java.lang.Enum" method="valueOf">
+      <class>models.mediaDB.Tag</class>
+      <string>Lifestyle</string>
+     </object>
+    </void>
+    <void method="add">
+     <object class="java.lang.Enum" method="valueOf">
+      <class>models.mediaDB.Tag</class>
+      <string>Animal</string>
+     </object>
+    </void>
+   </object>
+  </void>
+  <void property="uploadDate">
+   <long>1618256703592</long>
+  </void>
+  <void property="uploader">
+   <string>UPU</string>
+  </void>
+ </object>
+</java>
