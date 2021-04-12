@@ -1,11 +1,17 @@
+/**
+ * @author Dustin Eikmeier
+ * @version 1.0
+ * @since 1.8
+ */
+
 package logic.persistence.models;
 
-import models.mediaDB.Audio;
+import models.mediaDB.LicensedAudio;
 import models.mediaDB.Tag;
 
 import java.util.Collection;
 
-public class JBP_Audio extends PersistenceItem {
+public class JBP_LicensedAudio extends PersistenceItem {
     private int sampling_rate;
     private String encoding;
     private long bitrate;
@@ -16,22 +22,24 @@ public class JBP_Audio extends PersistenceItem {
     private long accessCount;
     private String uploader;
     private long uploadDate;
+    private String holder;
 
-    public JBP_Audio(Audio audio) {
-        this.sampling_rate = audio.getSamplingRate();
-        this.encoding = audio.getEncoding();
-        this.bitrate = audio.getBitrate();
-        this.length = audio.getLength().getSeconds();
-        this.size = audio.getSize().toPlainString();
-        this.address = audio.getAddress();
-        this.tags = audio.getTags();
-        this.accessCount = audio.getAccessCount();
-        this.bitrate = audio.getBitrate();
-        this.uploader = audio.getUploader().getName();
-        this.uploadDate = audio.getUploadDate().getTime();
+    public JBP_LicensedAudio(LicensedAudio licensed_audio) {
+        this.sampling_rate = licensed_audio.getSamplingRate();
+        this.encoding = licensed_audio.getEncoding();
+        this.bitrate = licensed_audio.getBitrate();
+        this.length = licensed_audio.getLength().getSeconds();
+        this.size = licensed_audio.getSize().toPlainString();
+        this.address = licensed_audio.getAddress();
+        this.tags = licensed_audio.getTags();
+        this.accessCount = licensed_audio.getAccessCount();
+        this.bitrate = licensed_audio.getBitrate();
+        this.uploader = licensed_audio.getUploader().getName();
+        this.uploadDate = licensed_audio.getUploadDate().getTime();
+        this.holder = licensed_audio.getHolder();
     }
 
-    public JBP_Audio(int sampling_rate, String encoding, long bitrate, long length, String size, String address, Collection<Tag> tags, long accessCount, String uploader, long uploadDate) {
+    public JBP_LicensedAudio(int sampling_rate, String encoding, long bitrate, long length, String size, String address, Collection<Tag> tags, long accessCount, String uploader, long uploadDate, String holder) {
         this.sampling_rate = sampling_rate;
         this.encoding = encoding;
         this.bitrate = bitrate;
@@ -42,9 +50,10 @@ public class JBP_Audio extends PersistenceItem {
         this.accessCount = accessCount;
         this.uploader = uploader;
         this.uploadDate = uploadDate;
+        this.holder = holder;
     }
 
-    public int getSampling_rate() {
+    public int getSamplingRate() {
         return sampling_rate;
     }
 
@@ -82,5 +91,9 @@ public class JBP_Audio extends PersistenceItem {
 
     public long getUploadDate() {
         return uploadDate;
+    }
+
+    public String getHolder() {
+        return holder;
     }
 }

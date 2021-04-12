@@ -14,7 +14,7 @@ import java.util.Date;
 public class InteractiveVideoImpl implements InteractiveVideo {
     private int width;
     private int height;
-    private String encording;
+    private String encoding;
     private long bitrate;
     private Duration length;
     private BigDecimal size;
@@ -25,10 +25,10 @@ public class InteractiveVideoImpl implements InteractiveVideo {
     private Date uploadDate;
     private String type;
 
-    public InteractiveVideoImpl(int width, int height, String encording, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, Uploader uploader, String type) {
+    public InteractiveVideoImpl(int width, int height, String encoding, long bitrate, Duration length, BigDecimal size, String address, Collection<Tag> tags, Uploader uploader, String type) {
         this.width = width;
         this.height = height;
-        this.encording = encording;
+        this.encoding = encoding;
         this.bitrate = bitrate;
         this.length = length;
         this.size = size;
@@ -52,7 +52,7 @@ public class InteractiveVideoImpl implements InteractiveVideo {
 
     @Override
     public String getEncoding() {
-        return encording;
+        return encoding;
     }
 
     @Override
@@ -105,7 +105,7 @@ public class InteractiveVideoImpl implements InteractiveVideo {
         return "InteractiveVideo{" +
                 "\n\twidth=" + width +
                 ", \n\theight=" + height +
-                ", \n\tencording='" + encording + '\'' +
+                ", \n\tencording='" + encoding + '\'' +
                 ", \n\tbitrate=" + bitrate +
                 ", \n\tlength=" + this.getDurationAsString() +
                 ", \n\tsize=" + size +

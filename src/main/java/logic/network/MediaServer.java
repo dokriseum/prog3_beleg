@@ -34,6 +34,7 @@ public class MediaServer implements Runnable {
     private InputEventListener inputEventListenerExit;
     private InputEventListener inputEventListenerShowMedia;
     private InputEventListener inputEventListenerShowUploader;
+    private InputEventListener inputEventListenerPersistence;
 
     public MediaServer(Socket socket) throws IOException {
         this.socket = socket;
@@ -79,6 +80,7 @@ public class MediaServer implements Runnable {
         inputEventListenerExit = new InputEventListenerExit(businessLogic);
         inputEventListenerShowMedia = new InputEventListenerShowMedia(businessLogic, in, out);
         inputEventListenerShowUploader = new InputEventListenerShowUploader(businessLogic, in, out);
+        inputEventListenerPersistence = new InputEventListenerPersistence(businessLogic, in, out);
         handler.add(inputEventListenerAddMedia);
         handler.add(inputEventListenerAddUploader);
         handler.add(inputEventListenerDeleteMedia);
@@ -88,6 +90,7 @@ public class MediaServer implements Runnable {
         handler.add(inputEventListenerExit);
         handler.add(inputEventListenerShowMedia);
         handler.add(inputEventListenerShowUploader);
+        handler.add(inputEventListenerPersistence);
         this.io.setHandler(handler);
     }
 }

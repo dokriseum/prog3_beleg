@@ -1,12 +1,19 @@
+/**
+ * @author Dustin Eikmeier
+ * @version 1.0
+ * @since 1.8
+ */
+
 package logic.persistence.models;
 
-import models.mediaDB.Audio;
 import models.mediaDB.Tag;
+import models.mediaDB.Video;
 
 import java.util.Collection;
 
-public class JBP_Audio extends PersistenceItem {
-    private int sampling_rate;
+public class JBP_Video extends PersistenceItem {
+    private int width;
+    private int height;
     private String encoding;
     private long bitrate;
     private long length;
@@ -17,22 +24,24 @@ public class JBP_Audio extends PersistenceItem {
     private String uploader;
     private long uploadDate;
 
-    public JBP_Audio(Audio audio) {
-        this.sampling_rate = audio.getSamplingRate();
-        this.encoding = audio.getEncoding();
-        this.bitrate = audio.getBitrate();
-        this.length = audio.getLength().getSeconds();
-        this.size = audio.getSize().toPlainString();
-        this.address = audio.getAddress();
-        this.tags = audio.getTags();
-        this.accessCount = audio.getAccessCount();
-        this.bitrate = audio.getBitrate();
-        this.uploader = audio.getUploader().getName();
-        this.uploadDate = audio.getUploadDate().getTime();
+    public JBP_Video(Video video) {
+        this.width = video.getWidth();
+        this.height = video.getHeight();
+        this.encoding = video.getEncoding();
+        this.bitrate = video.getBitrate();
+        this.length = video.getLength().getSeconds();
+        this.size = video.getSize().toPlainString();
+        this.address = video.getAddress();
+        this.tags = video.getTags();
+        this.accessCount = video.getAccessCount();
+        this.bitrate = video.getBitrate();
+        this.uploader = video.getUploader().getName();
+        this.uploadDate = video.getUploadDate().getTime();
     }
 
-    public JBP_Audio(int sampling_rate, String encoding, long bitrate, long length, String size, String address, Collection<Tag> tags, long accessCount, String uploader, long uploadDate) {
-        this.sampling_rate = sampling_rate;
+    public JBP_Video(int width, int height, String encoding, long bitrate, long length, String size, String address, Collection<Tag> tags, long accessCount, String uploader, long uploadDate) {
+        this.width = width;
+        this.height = height;
         this.encoding = encoding;
         this.bitrate = bitrate;
         this.length = length;
@@ -44,8 +53,12 @@ public class JBP_Audio extends PersistenceItem {
         this.uploadDate = uploadDate;
     }
 
-    public int getSampling_rate() {
-        return sampling_rate;
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public String getEncoding() {

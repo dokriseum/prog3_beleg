@@ -5,5 +5,6 @@ public enum PersistenceType {
     LOAD_JOS,
     SAVE_JBP,
     LOAD_JBP,
-    PERSISTENCE_BY_ADDRESS
+    SAVE_CONTENT,
+    LOAD_CONTENT
 }

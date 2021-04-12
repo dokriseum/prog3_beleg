@@ -18,13 +18,17 @@ public class InputEventPersistence extends InputEvent {
         this.type = type;
     }
 
-    public InputEventPersistence(Object source, String text, String eventMediaAddress) {
+    public InputEventPersistence(Object source, String text, PersistenceType type, String eventMediaAddress) {
         super(source, text);
         this.eventMediaAddress = eventMediaAddress;
-        this.type = PersistenceType.PERSISTENCE_BY_ADDRESS;
+        this.type = type;
     }
 
     public String getEventMediaAddress() {
         return eventMediaAddress;
+    }
+
+    public PersistenceType getType() {
+        return type;
     }
 }

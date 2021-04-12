@@ -487,14 +487,18 @@ public class Input {
                 }
                 //throw new NotImplementsException("CONFIG MODE is yet not implements");
             case PERSISTENCE:
-                if (inputStringSplitted[0].equals("saveJOS")) {
+                if (inputStringSplitted[0].equalsIgnoreCase("saveJOS")) {
                     return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.SAVE_JOS);
-                } else if (inputStringSplitted[0].equals("loadJOS")) {
+                } else if (inputStringSplitted[0].equalsIgnoreCase("loadJOS")) {
                     return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.LOAD_JOS);
-                } else if (inputStringSplitted[0].equals("saveJBP")) {
+                } else if (inputStringSplitted[0].equalsIgnoreCase("saveJBP")) {
                     return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.SAVE_JBP);
-                } else if (inputStringSplitted[0].equals("loadJBP")) {
+                } else if (inputStringSplitted[0].equalsIgnoreCase("loadJBP")) {
                     return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.LOAD_JBP);
+                } else if (inputStringSplitted[0].equalsIgnoreCase("save")) {
+                    return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.SAVE_CONTENT, inputStringSplitted[1]);
+                } else if (inputStringSplitted[0].equalsIgnoreCase("load")) {
+                    return new InputEventPersistence(this, "InputEventPersistence", PersistenceType.LOAD_CONTENT, inputStringSplitted[1]);
                 } else {
                     throw new IllegalArgumentException("wrong persistence type");
                 }
