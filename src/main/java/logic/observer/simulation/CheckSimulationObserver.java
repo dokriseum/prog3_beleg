@@ -49,6 +49,11 @@ public class CheckSimulationObserver implements Observer {
         }
     }
 
+    @Override
+    public String getName() {
+        return "CheckSimulationObserver";
+    }
+
     private synchronized void print(BufferedWriter bw) throws IOException {
         bw.write(this.printCheckIfAddOrDel());
         bw.flush();

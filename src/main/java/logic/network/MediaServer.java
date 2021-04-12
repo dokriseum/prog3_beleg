@@ -66,29 +66,6 @@ public class MediaServer implements Runnable {
 
     private boolean executeSession(DataInputStream in, DataOutputStream out) throws IOException {
         io.input();
-//        char command = in.readChar();
-//        if ('I' != command) return "unknown command: " + command;
-//        int bookId = in.readInt();
-//        //if(!logic.network.library.bookExists(bookId)) return "unknown book: "+bookId;
-//        int lineNumber = in.readInt();
-//        if (!library.bookExists(bookId)) return "unknown book: " + bookId;
-//        do {
-//            if (!library.lineExists(bookId, lineNumber)) {
-//                out.writeChar('E');
-//                return null;
-//            }
-//            out.writeChar('L');
-//            out.writeUTF(this.library.getLine(bookId, lineNumber++));
-//            char response = in.readChar();
-//            switch (response) {
-//                case 'N':
-//                    break;
-//                case 'S':
-//                    return null;
-//                default:
-//                    return "unknown response: " + response;
-//            }
-//        } while (true);
         return true;
     }
 
